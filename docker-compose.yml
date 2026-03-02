@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: pakasso_internetbanking
+    restart: always
+    ports:
+      - "3006:3006"
+    env_file:
+      - .env
