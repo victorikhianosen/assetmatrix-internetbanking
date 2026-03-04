@@ -25,7 +25,7 @@ export default function RecentTransaction({
       <div className="flex justify-between items-center w-full mb-6">
         <h3 className="font-semibold text-lg mb-5">Recent Transactions</h3>
         <button
-          className="text-sm font-medium text-primary hover:-translate-x-1 transition hover:bg-primary hover:text-white bg-gray-100 rounded-xl py-2.5 px-5"
+          className="text-sm font-medium text-secondary hover:-translate-x-1 transition hover:bg-primary hover:text-white bg-gray-100 rounded-xl py-2.5 px-5"
           onClick={() => {
             router.push("/transactions");
           }}>
@@ -61,7 +61,7 @@ export default function RecentTransaction({
                 </div>
 
                 <div className="overflow-hidden">
-                  <p className="font-medium text-sm truncate">{getTitle(t)}</p>
+                  <p className="text-sm truncate">{getTitle(t)}</p>
                   <p className="text-xs text-gray-400">{formatDateTime(t.created_at)}</p>
                 </div>
               </div>

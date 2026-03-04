@@ -29,14 +29,14 @@ export default function AccountLimit({ transactions = [] }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* LIMIT CARD */}
-      <div className="bg-primary text-white rounded-3xl p-6 space-y-3">
+      <div className="bg-linear-to-br from-primary to-secondary text-white rounded-3xl p-6 space-y-3">
         <p className="text-sm opacity-80">Account limit</p>
         <p className="text-2xl font-semibold">Unlimited</p>
       </div>
 
       {/* STATS */}
-      <div className="md:col-span-2 bg-white rounded-2xl p-6 hidden md:block">
-        <h3 className="font-semibold mb-4 text-primary">
+      <div className="md:col-span-2 bg-white text-secondary rounded-2xl p-6 hidden md:block">
+        <h3 className="font-semibold mb-4">
           Transaction Stats
         </h3>
 
@@ -64,7 +64,7 @@ function Row({ label, value }: RowProps) {
   return (
     <div className="flex justify-between bg-gray-50 p-4 rounded-xl">
       <span>{label}</span>
-      <span className="font-semibold">
+      <span className="">
         ₦{Number(value).toLocaleString()}
       </span>
     </div>
