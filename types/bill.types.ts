@@ -20,3 +20,50 @@ export type BuyDataPaylaod = {
   transaction_pin: string;
   platform: string;
 };
+
+export type CableSubscription = {
+  status: string;
+  responseCode: string;
+  message: string;
+  data: CableSubscriptionData[];
+};
+
+export type CableSubscriptionData = {
+  name: string;
+  code: string;
+  amount: string;
+};
+
+export type VerifyCableRequest = {
+  smartcard_number: string;
+  cable_type: string;
+};
+
+export type VerifyCableResponse = {
+  status: string;
+  responseCode: string;
+  message: string;
+  data: {
+    name: string;
+    type: string;
+    current_bouquet: string;
+  };
+};
+
+export type BuyCableRequest = {
+  amount: string;
+  phone_number: string;
+  smartcard_number: string;
+  subscription_plan: string;
+  cable_type: string;
+  transaction_pin: string;
+  platform: string;
+};
+
+export type BuyAirtime = {
+  amount: number;
+  phone_number: string;
+  network_provider: string;
+  transaction_pin: string;
+  platform: string;
+};
