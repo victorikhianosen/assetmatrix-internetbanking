@@ -84,7 +84,7 @@ export default function TransactionsPage() {
                   </div>
 
                   <div className="overflow-hidden">
-                    <p className="font-medium text-sm truncate">{getTitle(t)}</p>
+                    <p className="text-sm truncate">{getTitle(t)}</p>
                     <p className="text-xs text-gray-400">{formatDateTime(t.created_at)}</p>
                   </div>
                 </div>

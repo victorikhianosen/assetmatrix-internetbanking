@@ -122,7 +122,7 @@ function EditHeader({ user }: { user: UserType }) {
         Back
       </button>
 
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary to-[#1f272f] text-white p-10 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary to-secondary text-white p-10 shadow-xl">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="relative">
             <div className="w-28 h-28 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl font-bold overflow-hidden">
@@ -189,7 +189,7 @@ function EditDetails({
 }) {
   return (
     <div className="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 mt-6">
-      <h3 className="font-semibold text-primary mb-6 text-lg">Personal Information</h3>
+      <h3 className="font-semibold text-secondary mb-6 text-lg">Personal Information</h3>
 
       <div className="grid md:grid-cols-2 gap-5">
         <Input label="First Name" value={form.first_name} disabled />

@@ -10,20 +10,23 @@ import BuyDataPinModal from "../../../../features/data/components/BuyDataPinModa
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { UseGetBalance } from "@/hooks/useBalance";
-import { useGetDataBundles } from "@/features/data/hooks/useDataBundle";
-import { DataBundleData } from "@/types/bill.types";
+import { UseGetCableSubscriptions } from "@/features/cable/hooks/useCable";
+import { CableSubscriptionData } from "@/types/bill.types";
 import { useRef } from "react";
-import { buyData } from "@/app/actions/bills/data/buy-data.action";
+import { BuyCable } from "@/app/actions/bills/cable/buy-cable.action";
 import AddMoneyDialog from "@/components/dialog/addMoney";
+import { verifyCable } from "@/app/actions/bills/cable/verify-cable.action";
+import ConfirmTransferModal from "@/features/cable/components/confirmBuyCableModal";
+import TransferPinModal from "@/features/cable/components/subscribePinModal";
 
-const DataProviders = [
-  { value: "mtn", label: "MTN", image: "/assets/images/airtime-data/mtn.png" },
-  { value: "airtel", label: "Airtel", image: "/assets/images/airtime-data/airtel.png" },
-  { value: "glo", label: "GLO", image: "/assets/images/airtime-data/glo.png" },
-  { value: "etisalat", label: "9Mobile", image: "/assets/images/airtime-data/9mobile.png" },
+const cable_tv_providers = [
+  { value: "gotv", label: "Gotv", image: "/assets/images/cables/gotv.png" },
+  { value: "startimes", label: "Startimes", image: "/assets/images/cables/startimes.png" },
+  { value: "dstv", label: "Dstv", image: "/assets/images/cables/dstv.png" },
+  { value: "showmax", label: "Showmax", image: "/assets/images/cables/showmax.png" },
 ];
 
-export default function DataPage() {
+export default function CablePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,35 +35,41 @@ export default function DataPage() {
   const [open, setOpen] = useState(false);
 
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [network, setNetwork] = useState<string>("");
-  const [networkBundle, setNetworkBundle] = useState<string>("");
-  const [selectedBundle, setSelectedBundle] = useState("");
+  const [smartNumber, setSmartNumber] = useState("");
+  const [cable, setCable] = useState<string>("");
+  const [CablesPlan, setCablesPlan] = useState<string>("");
+  const [selectedPlan, setSelectedPlan] = useState("");
   const [dataAmount, setDataAmount] = useState<number>(0);
 
-  const [showDataBundles, setShowDataBundles] = useState(false);
-  const [showPinModal, setShowPinModal] = useState(false);
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [errors, setErrors] = useState("");
+
+  const [CablePlan, setCablePlan] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showPinModal, setShowPinModal] = useState(false);
 
   const [successMessage, setSuccessMessage] = useState("");
 
   const { data: balanceData } = UseGetBalance();
   const balance = balanceData?.data?.balance ?? 0;
 
-  const { data: dataBundlesData } = useGetDataBundles(network);
-  const dataBundles = dataBundlesData?.data ?? [];
-  console.log(dataBundles)
+  const { data: cablePlans } = UseGetCableSubscriptions(cable);
+  const cablePlansData = cablePlans?.data ?? [];
+  console.log(cablePlansData);
 
-  // Reset bundle when network changes
+  // Reset bundle when cable changes
   useEffect(() => {
-    setSelectedBundle("");
-    setNetworkBundle("");
-    setShowDataBundles(false);
-  }, [network]);
+    setSelectedPlan("");
+    setCablesPlan("");
+    setCablePlan(false);
+  }, [cable]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setShowDataBundles(false);
+        setCablePlan(false);
       }
     }
 
@@ -71,12 +80,46 @@ export default function DataPage() {
     };
   }, []);
 
-  async function handleTransfer(pin: string) {
+  async function handleVerifyCable() {
     const payload = {
-      data_plan: networkBundle,
+      smartcard_number: smartNumber,
+      cable_type: cable,
+    };
+
+    try {
+      setLoading(true);
+
+      const res = await verifyCable(payload);
+
+      const isSuccess = res?.status === "success" && res?.responseCode === "000";
+
+      if (isSuccess) {
+        const { name, type } = res.data;
+
+        setName(name);
+        setType(type);
+        toast.success(res.message);
+        setShowConfirmModal(true);
+        return;
+      }
+
+      setErrors(res?.message || "Verification failed");
+      toast.error(res?.message || "Verification failed");
+    } catch {
+      toast.error("Network error. Try again.");
+      setShowConfirmModal(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleCablePayment(pin: string) {
+    const payload = {
+      subscription_plan: CablesPlan,
+      smartcard_number: smartNumber,
       phone_number: phoneNumber,
-      network_provider: network,
-      amount: dataAmount,
+      cable_type: cable,
+      amount: String(dataAmount),
       transaction_pin: pin,
       platform: "web",
     };
@@ -84,7 +127,7 @@ export default function DataPage() {
     try {
       setLoading(true);
 
-      const res = await buyData(payload);
+      const res = await BuyCable(payload);
 
       if (res.responseCode === "000") {
         setShowPinModal(false);
@@ -92,9 +135,9 @@ export default function DataPage() {
         setShowSuccessModal(true);
 
         setPhoneNumber("");
-        setNetwork("");
-        setNetworkBundle("");
-        setSelectedBundle("");
+        setCable("");
+        setCablesPlan("");
+        setSelectedPlan("");
 
         queryClient.invalidateQueries({ queryKey: ["balance"] });
         queryClient.invalidateQueries({ queryKey: ["transactions"] });
@@ -111,13 +154,28 @@ export default function DataPage() {
     }
   }
 
-  const isValid = phoneNumber.length === 11 && network !== "" && networkBundle !== "";
+  const isValid = phoneNumber.length === 11 && cable !== "" && CablesPlan !== "";
 
   return (
     <>
-      <BuyDataPinModal
+      <ConfirmTransferModal
+        isOpen={showConfirmModal}
+        
+        bankName={bankName}
+        onCancel={() => setShowConfirmModal(false)}
+        onConfirm={(amount, narration) => {
+          setTransferAmount(amount);
+          setNarration(narration || "");
+          setShowPinModal(true);
+        }}
+      />
+
+      <TransferPinModal
         isOpen={showPinModal}
-        onCancel={() => setShowPinModal(false)}
+        onCancel={() => {
+          setShowPinModal(false);
+          setTransferAmount(null);
+        }}
         onConfirm={(pin) => handleTransfer(pin)}
       />
 
@@ -140,7 +198,7 @@ export default function DataPage() {
 
           <div className="space-y-8 ">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-semibold text-primary">Buy Data</h1>
+              <h1 className="text-xl font-semibold text-primary">Buy Cable</h1>
               <button
                 className="text-sm font-medium text-green-600 hover:underline"
                 onClick={() => router.push("/transactions")}>
@@ -151,8 +209,8 @@ export default function DataPage() {
             {/* BALANCE CARD */}
             <div className="rounded-2xl bg-linear-to-r from-primary to-secondary text-white px-8 py-6 flex items-center justify-between">
               <div>
-                <p className="text-sm opacity-90">Purchase Data</p>
-                <p className="font-semibold mt-1">Use your balance to purchase data</p>
+                <p className="text-sm opacity-90">Subscribe to Cable</p>
+                <p className="font-semibold mt-1">Use your balance to subscribe to cable tv</p>
                 <button
                   className="mt-4 bg-black text-white text-sm px-4 py-2 rounded-lg"
                   onClick={() => {
@@ -169,30 +227,39 @@ export default function DataPage() {
               <h2 className="text-lg font-semibold text-primary mb-6">Recipient Details</h2>
 
               <div className="space-y-6">
-                {/* NETWORK */}
+                {/* Cable */}
                 <div>
-                  <label className="text-sm font-medium text-secondary">Mobile Operator</label>
+                  <label className="text-sm font-medium text-secondary">Cable Operator</label>
                   <div className="flex gap-6 mt-3">
-                    {DataProviders.map((provider) => (
+                    {cable_tv_providers.map((provider) => (
                       <button
                         type="button"
                         key={provider.value}
-                        onClick={() => setNetwork(provider.value)}
+                        onClick={() => setCable(provider.value)}
                         className={`p-2 rounded-xl ${
-                          network === provider.value ? "bg-gray-100" : ""
+                          cable === provider.value ? "bg-gray-100" : ""
                         }`}>
                         <Image
                           src={provider.image}
                           alt={provider.label}
-                          width={50}
-                          height={50}
-                          className={`${
-                            network === provider.value ? "opacity-100 scale-110" : "opacity-50"
-                          }`}
+                          width={100}
+                          height={100}
+                          className={`${cable === provider.value ? "opacity-100" : "opacity-50"}`}
                         />
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-secondary">Smart Card Number</label>
+                  <input
+                    value={smartNumber}
+                    maxLength={20}
+                    onChange={(e) => setSmartNumber(e.target.value.replace(/\D/g, ""))}
+                    placeholder="Enter smart card number"
+                    className="w-full h-12 px-4 rounded-xl border border-border mt-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+                  />
                 </div>
 
                 {/* PHONE NUMBER */}
@@ -202,43 +269,43 @@ export default function DataPage() {
                     value={phoneNumber}
                     maxLength={11}
                     onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ""))}
-                    placeholder="Enter 11-digit phone number"
+                    placeholder="Enter phone number"
                     className="w-full h-12 px-4 rounded-xl border border-border mt-2 focus:outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
 
                 {/* DATA BUNDLES */}
                 <div>
-                  <label className="text-sm font-medium text-secondary">Data Bundles</label>
+                  <label className="text-sm font-medium text-secondary">Cable Plan</label>
 
                   <div ref={dropdownRef} className="mt-2">
                     <button
                       type="button"
-                      onClick={() => setShowDataBundles((prev) => !prev)}
+                      onClick={() => setCablePlan((prev) => !prev)}
                       className="w-full bg-white p-3 rounded-xl border border-border text-left"
-                      disabled={!network}>
-                      {selectedBundle || "Select a bundle"}
+                      disabled={!cable}>
+                      {selectedPlan || "Select a Cable Plan"}
                     </button>
 
-                    {showDataBundles && (
+                    {CablePlan && (
                       <div className="mt-2 bg-white border border-border rounded-xl max-h-60 overflow-y-auto shadow-sm">
-                        {dataBundles.length === 0 ? (
-                          <p className="p-4 text-sm text-secondary/50">No bundles available</p>
+                        {cablePlansData.length === 0 ? (
+                          <p className="p-4 text-sm text-secondary/50">No Cable Plan available</p>
                         ) : (
-                          dataBundles.map((bundle: DataBundleData) => (
+                          cablePlansData.map((bundle: CableSubscriptionData) => (
                             <button
                               key={bundle.name}
                               type="button"
                               onClick={() => {
-                                setSelectedBundle(bundle.name);
-                                setNetworkBundle(bundle.variation_code);
-                                setShowDataBundles(false);
-                                setDataAmount(parseInt(bundle.variation_amount));
+                                setSelectedPlan(bundle.name);
+                                setCablesPlan(bundle.code);
+                                setCablePlan(false);
+                                setDataAmount(parseInt(bundle.amount));
                               }}
                               className="flex justify-between items-center text-left w-full px-4 py-3 hover:bg-gray-100 text-sm">
                               <span>{bundle.name}</span>
                               <span className="text-primary">
-                                ₦{parseInt(bundle.variation_amount).toLocaleString()}
+                                ₦{parseInt(bundle.amount).toLocaleString()}
                               </span>
                             </button>
                           ))

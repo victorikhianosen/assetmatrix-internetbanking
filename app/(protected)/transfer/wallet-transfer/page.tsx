@@ -12,6 +12,7 @@ import TransferPinModal from "@/features/wallet/components/TransferPinModal";
 import SuccessModal from "@/components/shared/SuccessModal";
 import { UseGetBalance } from "@/hooks/useBalance";
 import { useQueryClient } from "@tanstack/react-query";
+import AddMoneyDialog from "@/components/dialog/addMoney";
 
 export default function WalletTransferPage() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function WalletTransferPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fullName, setFullName] = useState("");
+  const [open, setOpen] = useState(false);
 
   const [accountNumber, setAccountNumber] = useState("");
   const bankName = "Pakasso Credit Capital Ltd";
@@ -97,7 +99,7 @@ export default function WalletTransferPage() {
       toast.error(res?.message || "Account verification failed");
       setError(res?.message);
       return;
-    } catch  {
+    } catch {
       toast.error("Unable to verify account. Try again.");
       setShowConfirmModal(true);
     } finally {
@@ -118,7 +120,6 @@ export default function WalletTransferPage() {
       setLoading(true);
       const result = await walletTransfers(payload);
       if (result.responseCode === "000") {
-
         toast.info(result.message);
 
         setShowPinModal(false);
@@ -184,52 +185,55 @@ export default function WalletTransferPage() {
       />
 
       <Loader show={loading} />
-      <div className="min-h-screen bg-muted">
+      <div className="min-h-screen bg-muted text-secondary">
         <div className="max-w-5xl mx-auto">
           <button
             onClick={() => router.back()}
-            className="flex cursor-pointer justify-center items-center gap-2 text-sm font-medium text-primary hover:opacity-70 w-fit">
+            className="flex cursor-pointer justify-center items-center gap-2 text-sm font-medium  hover:opacity-70 w-fit">
             <span className="text-lg">←</span>
             Back
           </button>
 
           <div className="space-y-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-semibold text-primary">Transfer To Pakasso Account</h1>
-              <button className="text-sm font-medium text-green-600 hover:underline" onClick={() => router.push("/transactions")}>
+              <h1 className="text-xl font-semibold text-primary">
+                Transfer To Assetmatrix Account
+              </h1>
+              <button
+                className="text-sm font-medium text-green-600 hover:underline"
+                onClick={() => router.push("/transactions")}>
                 History
               </button>
             </div>
 
             {/* PROMO BANNER */}
-            <div className="rounded-2xl bg-linear-to-r from-yellow-600 to-primary text-white px-8 lg:py-6 py-4 lg:flex items-center justify-between">
+            <div className="rounded-2xl bg-linear-to-r from-primary to-secondary text-white px-8 lg:py-6 py-4 lg:flex items-center justify-between">
               <div>
-                <p className="text-sm opacity-90">Transfer to Other Banks</p>
+                <p className="text-sm opacity-90">Transfer to Assetmatrix</p>
                 <p className="font-semibold mt-1">Use your balance to send money instantly</p>
                 <div className="text-4xl font-bold lg:hidden mt-4">₦{balance.toLocaleString()}</div>
-                <button className="mt-4 bg-black text-white text-sm px-4 py-2 rounded-lg">
-                  Top up Now
+                <button
+                  className="mt-4 bg-black text-white text-sm px-4 py-2 rounded-lg"
+                  onClick={() => {
+                    setOpen(true);
+                  }}>
+                  Add Money
                 </button>
               </div>
 
               <div className="text-4xl font-bold hidden lg:block">₦{balance.toLocaleString()}</div>
             </div>
 
-            {/* FREE TRANSFERS */}
-            <div className="bg-purple-50 text-purple-700 px-4 py-3 rounded-xl text-sm font-medium w-fit">
-              ⚡ Free transfers for the day: <strong>3</strong>
-            </div>
-
             {/* FORM CARD */}
             <form
               onSubmit={handleNameEnquiry}
               className="bg-background border border-border rounded-3xl p-5 lg:p-10 max-w-6xl">
-              <h2 className="text-lg font-semibold text-primary mb-6">Recipient Account</h2>
+              <h2 className="text-lg font-semibold mb-6 text-primary">Recipient Account</h2>
 
               <div className="space-y-5">
                 {/* ACCOUNT NUMBER */}
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-primary">Account Number</label>
+                  <label className="text-sm font-medium">Account Number</label>
                   <input
                     value={account}
                     maxLength={10}
@@ -245,13 +249,13 @@ export default function WalletTransferPage() {
 
                 {/* NEXT BUTTON */}
                 <button
-                  className={`w-full cursor-pointer h-14 rounded-full font-semibold transition bg-primary text-white
+                  className={`w-full cursor-pointer h-14 rounded-xl font-semibold transition bg-primary text-white
                 `}>
                   Next
                 </button>
               </div>
             </form>
-
+            <AddMoneyDialog onClose={() => setOpen(false)} open={open} />
           </div>
         </div>
       </div>

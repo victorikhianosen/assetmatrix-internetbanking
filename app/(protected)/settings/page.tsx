@@ -16,8 +16,8 @@ export default function SettingsPage() {
         Back
       </button>
       <div>
-        <h1 className="text-2xl font-semibold">Settings</h1>
-        <p className="text-gray-700">Manage your account preferences and security</p>
+        <h1 className="text-2xl font-semibold text-secondary">Settings</h1>
+        <p className="text-secondary/50">Manage your account preferences and security</p>
       </div>
       <SettingsSection />
     </div>

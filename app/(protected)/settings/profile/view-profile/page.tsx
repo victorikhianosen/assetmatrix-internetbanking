@@ -45,7 +45,7 @@ function ProfileHeader({ user }: { user: UserType | null }) {
         Back
       </button>
 
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary to-[#1f272f] text-white p-10 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary to-secondary text-white p-10 shadow-xl">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="relative">
             <div className="w-28 h-28 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl font-bold">
@@ -75,7 +75,7 @@ function ProfileHeader({ user }: { user: UserType | null }) {
 
             <Link
               href="/settings/profile/edit-profile"
-              className="inline-block mt-4 bg-white text-primary px-5 py-2 rounded-xl text-sm font-semibold hover:scale-95 transition">
+              className="inline-block mt-4 bg-secondary text-white px-6 py-3 rounded-xl text-sm font-semibold hover:scale-95 transition">
               Edit Profile
             </Link>
           </div>
@@ -88,7 +88,7 @@ function ProfileHeader({ user }: { user: UserType | null }) {
 function ProfileDetails({ user }: { user: UserType | null }) {
   return (
     <div className="md:col-span-2 bg-white rounded-3xl p-7 shadow-sm border border-gray-100">
-      <h3 className="font-semibold text-primary mb-6 text-lg">Personal Information</h3>
+      <h3 className="font-semibold text-secondary mb-6 text-lg">Personal Information</h3>
 
       <div className="divide-y">
         <Row icon={<User size={18} />} label="Full Name">
@@ -150,11 +150,11 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
-      <div className="flex items-center gap-3 text-gray-500 text-sm">
+      <div className="flex items-center gap-3 text-secondary">
         {icon}
         {label}
       </div>
-      <span className="font-medium text-primary text-sm">{children}</span>
+      <span className="text-secondary/50">{children}</span>
     </div>
   );
 }
