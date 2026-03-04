@@ -114,9 +114,9 @@ export default function LoginPage() {
 
       const res = await login(payload);
       if (res?.responseCode === "000") {
-
         toast.success("Login successful");
         setTimeout(() => router.push("/dashboard"), 2000);
+        localStorage.setItem("access_token", res.data.access_token);
         return;
       }
 
@@ -135,22 +135,22 @@ export default function LoginPage() {
 
       <div className="min-h-screen flex bg-[#F7F7F7]">
         <SideBar />
-
+        
         <div className="w-full md:w-1/2 flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <div className="flex justify-center mb-8">
               <Image
+                alt="Logo"
                 src="/assets/images/logo.png"
-                alt="logo"
-                className="h-12 object-contain"
-                width={100}
-                height={100}
+                width={150}
+                height={80}
+                className="h-10"
               />
             </div>
 
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold text-primary">Login to your account</h2>
-              <p className="text-sm text-gray-500">Enter your details</p>
+              <p className="text-sm text-secondary/50">Enter your details</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -163,7 +163,8 @@ export default function LoginPage() {
                     setUsername(e.target.value);
                     setErrors((p) => ({ ...p, username: "" }));
                   }}
-                  className={`w-full text-black rounded-lg border px-4 py-3 focus:ring-2 focus:ring-[#fee028] ${errors.username && "border-red-500"}`}
+                  autoFocus
+                  className={`w-full text-black rounded-lg focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none border border-secondary/50 px-4 py-3 ${errors.username && "border-red-500"}`}
                 />
                 {errors.username && <p className="text-xs text-red-600 mt-1">{errors.username}</p>}
               </div>
@@ -178,7 +179,7 @@ export default function LoginPage() {
                     setPassword(e.target.value);
                     setErrors((p) => ({ ...p, password: "" }));
                   }}
-                  className={`w-full rounded-lg border px-4 py-3 text-black focus:ring-2 focus:ring-[#fee028] ${errors.password && "border-red-500"}`}
+                  className={`w-full rounded-lg border border-secondary/50 px-4 focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none py-3 text-black ${errors.password && "border-red-500"}`}
                 />
                 {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password}</p>}
               </div>

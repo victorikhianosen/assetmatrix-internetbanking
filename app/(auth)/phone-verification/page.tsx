@@ -152,7 +152,7 @@ export default function PhoneVerificationPage() {
 
             <div className="text-center mb-6">
               <h2 className="text-xl text-black font-semibold">Verify your phone number</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary/50">
                 Enter the 6-digit code sent to {phone.replace(/^(\d{3})\d{4}(\d{4})$/, "$1****$2")}
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function PhoneVerificationPage() {
                     maxLength={1}
                     value={d}
                     onChange={(e) => handleOtpChange(e.target.value, i)}
-                    className="w-12 h-14 text-center text-xl border rounded-xl text-black"
+                    className="w-12 h-14 text-center text-xl border rounded-xl text-black transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                   />
                 ))}
               </div>

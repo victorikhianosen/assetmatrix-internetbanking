@@ -7,11 +7,11 @@ export default function NotFoundPage() {
   const router = useRouter();
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-[#0f172a] overflow-hidden px-6">
+    <div className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden px-6">
 
       {/* Glow background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-primary/30 blur-[120px] rounded-full" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-125 h-125 bg-primary/30 blur-[120px] rounded-full" />
       </div>
 
       {/* Content */}
@@ -22,14 +22,14 @@ export default function NotFoundPage() {
           <Image
             src="/assets/images/logo.png"
             alt="Logo"
-            width={160}
-            height={60}
-            className="h-10"
+            width={200}
+            height={80}
+            className="h-12"
           />
         </div>
 
         {/* Animated 404 */}
-        <h1 className="text-[96px] font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#fee028] animate-float">
+        <h1 className="text-[96px] font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-primary to-primary/50 animate-float">
           404
         </h1>
 
@@ -37,7 +37,7 @@ export default function NotFoundPage() {
           Page not found
         </h2>
 
-        <p className="text-sm text-gray-400 mt-3 mb-8">
+        <p className="text-sm text-secondary/40 mt-3 mb-8">
           Looks like you followed a broken link or the page was moved.
         </p>
 
@@ -52,13 +52,13 @@ export default function NotFoundPage() {
 
           <button
             onClick={() => router.back()}
-            className="w-full py-3 rounded-xl border border-white/20 text-white transition hover:bg-white/10"
+            className="w-full py-3 rounded-xl border border-white/90 text-white hover:text-black transition hover:bg-white/80"
           >
             Go Back
           </button>
         </div>
 
-        <p className="mt-6 text-xs text-gray-500">
+        <p className="mt-6 text-xs text-secondary/50">
           Error code: 404 • Not found
         </p>
       </div>

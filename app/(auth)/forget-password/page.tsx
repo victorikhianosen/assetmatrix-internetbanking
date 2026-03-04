@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
     <>
       <Loader show={loading} />
 
-      <div className="min-h-screen flex bg-[#F7F7F7]">
+      <div className="min-h-screen flex bg-muted">
         <SideBar />
 
         <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
             {/* TITLE */}
             <div className="text-center mb-6">
               <h2 className="text-xl text-black font-semibold">Forgot Password</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary/50">
                 Enter your email to receive a password reset link
               </p>
             </div>
@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-md font-medium text-gray-700">
+                <label htmlFor="email" className="block text-md font-medium text-secondary/50">
                   Email address
                 </label>
 
@@ -100,7 +100,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
-                  className="w-full h-14 px-4 border rounded-xl text-black focus:outline-none focus:border-primary"
+                  className="w-full text-black rounded-lg border border-secondary/50 px-4 py-3 transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                 />
               </div>
 

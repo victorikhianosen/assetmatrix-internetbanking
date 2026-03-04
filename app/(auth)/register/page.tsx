@@ -224,7 +224,7 @@ export default function RegisterPage() {
             {/* TITLE */}
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold text-primary">Create your account</h2>
-              <p className="text-sm text-gray-500">Open a secure digital bank account in minutes</p>
+              <p className="text-sm text-secondary/50">Open a secure digital bank account in minutes</p>
             </div>
 
             {/* FORM */}
@@ -238,7 +238,7 @@ export default function RegisterPage() {
                   value={form.first_name}
                   onChange={handleChange}
                   readOnly
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.first_name ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.first_name ? "border-red-600" : ""}`}
                 />
                 {errors.first_name && (
                   <span className="text-red-600 text-md mt-1">{errors.first_name}</span>
@@ -253,7 +253,7 @@ export default function RegisterPage() {
                   value={form.last_name}
                   onChange={handleChange}
                   readOnly
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.last_name ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.last_name ? "border-red-600" : ""}`}
                 />
 
                 {errors.username && (
@@ -270,7 +270,7 @@ export default function RegisterPage() {
                   maxLength={11}
                   value={form.phone}
                   readOnly
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.phone ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.phone ? "border-red-600" : ""}`}
                 />
                 {errors.phone && <span className="text-red-600 text-md mt-1">{errors.phone}</span>}
               </div>
@@ -283,7 +283,7 @@ export default function RegisterPage() {
                   placeholder="Email address"
                   value={form.email}
                   onChange={handleChange}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.email ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.email ? "border-red-600" : ""}`}
                 />
                 {errors.email && <span className="text-red-600 text-md mt-1">{errors.email}</span>}
               </div>
@@ -297,7 +297,7 @@ export default function RegisterPage() {
                   placeholder="Bank Verification Number (BVN)"
                   value={form.bvn}
                   readOnly
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.bvn ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.bvn ? "border-red-600" : ""}`}
                 />
 
                 {errors.bvn && <span className="text-red-600 text-md mt-1">{errors.bvn}</span>}
@@ -311,7 +311,7 @@ export default function RegisterPage() {
                   value={form.dob}
                   onChange={handleChange}
                   readOnly
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.dob ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.dob ? "border-red-600" : ""}`}
                 />
 
                 {errors.dob && <span className="text-red-600 text-md mt-1">{errors.dob}</span>}
@@ -323,7 +323,7 @@ export default function RegisterPage() {
                   name="gender"
                   value={form.gender}
                   onChange={handleChange}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.gender ? "border-red-600" : ""}`}>
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.gender ? "border-red-600" : ""}`}>
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -340,7 +340,7 @@ export default function RegisterPage() {
                   placeholder="Username"
                   value={form.username}
                   onChange={handleChange}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${errors.username ? "border-red-600" : ""}`}
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.username ? "border-red-600" : ""}`}
                 />
                 {errors.username && (
                   <span className="text-red-600 text-md mt-1">{errors.username}</span>
@@ -354,13 +354,13 @@ export default function RegisterPage() {
                   placeholder="Password (min 8 characters)"
                   value={form.password}
                   onChange={handleChange}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 pr-10 ${
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" pr-10 ${
                     errors.password ? "border-red-600" : ""
                   }`}
                 />
                 <span
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500">
+                  className="absolute right-4 top-10 cursor-pointer text-secondary/50">
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </span>
                 {errors.password && (
@@ -378,7 +378,7 @@ export default function RegisterPage() {
                   placeholder="Confirm Password (min 8 characters)"
                   value={form.confirm_password}
                   onChange={handleChange}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 ${
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${
                     errors.confirm_password ? "border-red-600" : ""
                   }`}
                 />
@@ -398,7 +398,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   inputMode="numeric"
                   maxLength={4}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 pr-10 ${
+                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" pr-10 ${
                     errors.pin ? "border-red-600" : ""
                   }`}
                 />
@@ -420,7 +420,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   inputMode="numeric"
                   maxLength={4}
-                  className={`w-full text-black rounded-lg border px-4 py-3 bg-gray-100 pr-10 ${
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${
                     errors.confirm_pin ? "border-red-600" : ""
                   }`}
                 />

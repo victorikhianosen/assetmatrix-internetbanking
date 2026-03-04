@@ -253,7 +253,7 @@ export default function ResetPasswordPage() {
                         value={digit}
                         onChange={(e) => handleOtpChange(e.target.value, i)}
                         onKeyDown={(e) => handleKeyDown(e, i)}
-                        className="w-12 h-14 text-center text-xl border rounded-xl text-black"
+                        className="w-12 h-14 text-center text-xl border rounded-xl text-black transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                       />
                     ))}
                   </div>

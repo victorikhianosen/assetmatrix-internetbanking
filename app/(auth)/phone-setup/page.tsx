@@ -81,7 +81,7 @@ export default function PhoneSetup() {
       };
 
       const res = await resentOtp(payload);
-  
+
       if (res.status === "success") {
         sessionStorage.setItem("phone_otp", phone);
         toast.success(res.message);
@@ -161,7 +161,7 @@ export default function PhoneSetup() {
                     setError("");
                   }}
                   placeholder="Enter phone number"
-                  className={`w-full text-black rounded-lg border px-4 py-3 focus:ring-2 focus:ring-[#fee028] focus:outline-none ${error ? "border-red-500" : ""}`}
+                  className={`w-full text-black rounded-lg border transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none border-secondary/50 px-4 py-3 ${error ? "border-red-500" : ""}`}
                 />
 
                 {error && <p className="text-sm mt-1 text-red-600">{error}</p>}

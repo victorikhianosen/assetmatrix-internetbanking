@@ -97,7 +97,7 @@ export default function BvnPage() {
             {/* TITLE */}
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold text-primary">BVN Verification</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary/50">
                 Enter your Bank Verification Number to continue
               </p>
             </div>
@@ -121,7 +121,7 @@ export default function BvnPage() {
                     setError("");
                   }}
                   placeholder="Enter your 11-digit BVN"
-                  className={`w-full text-black rounded-lg border px-4 py-3 focus:ring-2 focus:ring-[#fee028] focus:outline-none ${
+                  className={`w-full text-black rounded-lg border-secondary/50 px-4 py-3 border transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none ${
                     error ? "border-red-500" : ""
                   }`}
                 />
