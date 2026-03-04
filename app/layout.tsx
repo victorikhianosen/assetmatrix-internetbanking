@@ -1,23 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/providers/contextProvider";
+import { Roboto } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
   subsets: ["latin"],
+  weight: ["100","200","300","400","500","600","700","800","900"],
+  variable: "--font-roboto",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Pakasso - Internet Banking",
-  description: "",
+  title: "Asset Matrix - Internet Banking",
+  description: "Internet banking platform for asset matrix microfinance bank customers",
+  keywords: [
+    "asset matrix",
+    "internet banking",
+    "microfinance",
+    "banking",
+    "asset management",
+    "financial services",
+    "Transfer",
+    "Loan",
+    "Deposit",
+    "Payment",
+  ],
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({
@@ -27,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`antialiased ${roboto.variable}`}>
         <Providers>
           {children}
           <ToastContainer position="top-right" />

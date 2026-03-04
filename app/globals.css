@@ -14,14 +14,12 @@
 
   --muted: #f7f7f7;
   --border: #e5e7eb;
-
-
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-roboto);
   --font-mono: var(--font-geist-mono);
 
    --color-primary: var(--primary);
@@ -53,7 +51,10 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Helvetica, sans-serif;
+  font-optical-sizing: auto;
+  box-sizing: border-box;
+  font-family: var(--font-roboto), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;;
 }
 
 
