@@ -13,18 +13,20 @@ export default function AppHeader() {
   const firstName = user?.first_name;
 
   return (
-    <header className="bg-white">
+    <header className="bg-background">
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
         {/* LEFT */}
         <div className="flex items-center gap-3">
-          <Image
-            src="/assets/images/logo.png"
-            alt="Logo"
-            width={120}
-            height={32}
-            className="h-10 w-auto"
-            priority
-          />
+          <Link href="/dashboard">
+            <Image
+              src="/assets/images/logo.png"
+              alt="Logo"
+              width={150}
+              height={80}
+              className="w-auto"
+              priority
+            />
+          </Link>
         </div>
 
         {/* RIGHT */}
@@ -32,7 +34,7 @@ export default function AppHeader() {
           <div className="relative">
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="cursor-pointer flex items-center gap-2 bg-[#F7F7F7] text-primary px-4 py-2 rounded-xl text-sm">
+              className="cursor-pointer flex items-center gap-2 bg-muted text-secondary px-4 py-2 rounded-xl text-sm">
               {/* Stable render for SSR + CSR */}
               <span className="flex items-center gap-2">
                 {user?.profilepic ? (
@@ -44,7 +46,7 @@ export default function AppHeader() {
                     className="w-8 h-8 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-8 h-8 p-1 font-semibold rounded-full bg-primary text-white flex items-center justify-center">
+                  <div className="w-8 h-8 p-1 font-semibold rounded-full bg-primary text-primary-foreground flex items-center justify-center">
                     {user?.last_name?.[0] || ""}
                     {user?.first_name?.[0] || ""}
                   </div>
@@ -64,17 +66,17 @@ export default function AppHeader() {
 
             {/* DROPDOWN */}
             <div
-              className={`absolute right-0 mt-3 w-52 rounded-2xl bg-white shadow-[0_12px_30px_rgba(0,0,0,0.08)]
+              className={`absolute right-0 mt-3 w-52 rounded-2xl bg-background shadow-[0_12px_30px_rgba(0,0,0,0.08)]
               transition-all origin-top-right z-50
               ${
                 menuOpen
                   ? "opacity-100 scale-100 pointer-events-auto"
                   : "opacity-0 scale-95 pointer-events-none"
               }`}>
-              <div className="py-2 text-sm text-primary w-full">
+              <div className="py-2 text-sm text-secondary w-full">
                 <Link href="/settings/profile/view-profile">
                   <button
-                    className="rounded-2xl cursor-pointer w-full text-left px-4 py-3 hover:bg-[#F7F7F7]"
+                    className="rounded-2xl cursor-pointer w-full text-left px-4 py-3 hover:bg-muted"
                     onClick={() => setMenuOpen(false)}>
                     Profile
                   </button>
@@ -82,19 +84,19 @@ export default function AppHeader() {
 
                 <Link href="/settings">
                   <button
-                    className="rounded-2xl cursor-pointer w-full text-left px-4 py-3 hover:bg-[#F7F7F7] "
+                    className="rounded-2xl cursor-pointer w-full text-left px-4 py-3 hover:bg-muted "
                     onClick={() => setMenuOpen(false)}>
                     Settings
                   </button>
                 </Link>
 
-                <Link href="/notifications">
+                {/* <Link href="/notifications">
                   <button
-                    className="rounded-2xl cursor-pointer w-full text-left px-4 py-3 hover:bg-[#F7F7F7] md:hidden"
+                    className="rounded-2xl border-b border-border cursor-pointer w-full text-left px-4 py-3 hover:bg-muted md:hidden"
                     onClick={() => setMenuOpen(false)}>
                     Notification
                   </button>
-                </Link>
+                </Link> */}
 
                 <Logout />
               </div>

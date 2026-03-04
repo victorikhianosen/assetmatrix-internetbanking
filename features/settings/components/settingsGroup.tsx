@@ -15,7 +15,7 @@ export default function SettingsGroup({ title, items }: { title: string; items: 
   return (
     <div className="space-y-4">
       {/* Section Heading */}
-      <h2 className="text-lg font-semibold text-primary">{title}</h2>
+      <h2 className="text-lg font-semibold text-secondary/70">{title}</h2>
 
       {/* Cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -34,10 +34,10 @@ export default function SettingsGroup({ title, items }: { title: string; items: 
               </div>
 
               <div className="flex flex-col">
-                <p className="font-medium text-primary text-lg group-hover:text-black transition">
+                <p className="font-medium text-secondary/70 text-lg group-hover:text-black transition">
                   {item.label}
                 </p>
-                <p className="text-gray-500 group-hover:text-black transition">
+                <p className="text-secondary/50 group-hover:text-black transition">
                   {item.description}
                 </p>
               </div>
