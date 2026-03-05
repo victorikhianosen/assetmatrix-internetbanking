@@ -148,7 +148,7 @@ export default function AirtimePage() {
               <div className="space-y-5">
                 {/* NETWORK */}
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-secondary ">Mobile Operator</label>
+                  <label className="text-sm font-medium text-secondary">Mobile Operator</label>
                   <div className="flex gap-7.5 mt-2">
                     {airtimeProviders.map((provider) => (
                       <button

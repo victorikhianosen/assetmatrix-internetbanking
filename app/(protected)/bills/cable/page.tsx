@@ -1,23 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import Loader from "@/components/shared/Loader";
 import SuccessModal from "@/components/shared/SuccessModal";
-import BuyDataPinModal from "../../../../features/data/components/BuyDataPinModal";
-import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
-import { UseGetBalance } from "@/hooks/useBalance";
-import { UseGetCableSubscriptions } from "@/features/cable/hooks/useCable";
-import { CableSubscriptionData } from "@/types/bill.types";
-import { useRef } from "react";
-import { BuyCable } from "@/app/actions/bills/cable/buy-cable.action";
 import AddMoneyDialog from "@/components/dialog/addMoney";
-import { verifyCable } from "@/app/actions/bills/cable/verify-cable.action";
 import ConfirmTransferModal from "@/features/cable/components/confirmBuyCableModal";
-import TransferPinModal from "@/features/cable/components/subscribePinModal";
+import SubscribePinModal from "@/features/cable/components/subscribePinModal";
+
+import { UseGetBalance } from "@/hooks/useBalance";
+import { verifyCable } from "@/app/actions/bills/cable/verify-cable.action";
+import { BuyCable } from "@/app/actions/bills/cable/buy-cable.action";
 
 const cable_tv_providers = [
   { value: "gotv", label: "Gotv", image: "/assets/images/cables/gotv.png" },
@@ -27,59 +24,32 @@ const cable_tv_providers = [
 ];
 
 export default function CablePage() {
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [smartNumber, setSmartNumber] = useState("");
-  const [cable, setCable] = useState<string>("");
-  const [CablesPlan, setCablesPlan] = useState<string>("");
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const [dataAmount, setDataAmount] = useState<number>(0);
+  const [cable, setCable] = useState("");
 
   const [name, setName] = useState("");
   const [type, setType] = useState("");
-  const [errors, setErrors] = useState("");
 
-  const [CablePlan, setCablePlan] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [subscriptionPlan, setSubscriptionPlan] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [amount, setAmount] = useState("");
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [successMessage, setSuccessMessage] = useState("");
 
   const { data: balanceData } = UseGetBalance();
   const balance = balanceData?.data?.balance ?? 0;
 
-  const { data: cablePlans } = UseGetCableSubscriptions(cable);
-  const cablePlansData = cablePlans?.data ?? [];
-  console.log(cablePlansData);
-
-  // Reset bundle when cable changes
-  useEffect(() => {
-    setSelectedPlan("");
-    setCablesPlan("");
-    setCablePlan(false);
-  }, [cable]);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setCablePlan(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+  /* ---------------- VERIFY CABLE ---------------- */
   async function handleVerifyCable() {
     const payload = {
       smartcard_number: smartNumber,
@@ -94,32 +64,29 @@ export default function CablePage() {
       const isSuccess = res?.status === "success" && res?.responseCode === "000";
 
       if (isSuccess) {
-        const { name, type } = res.data;
-
-        setName(name);
-        setType(type);
-        toast.success(res.message);
+        setName(res.data.name);
+        setType(res.data.type);
         setShowConfirmModal(true);
+        toast.success(res.message);
         return;
       }
 
-      setErrors(res?.message || "Verification failed");
       toast.error(res?.message || "Verification failed");
     } catch {
       toast.error("Network error. Try again.");
-      setShowConfirmModal(false);
     } finally {
       setLoading(false);
     }
   }
 
+  /* ---------------- BUY CABLE ---------------- */
   async function handleCablePayment(pin: string) {
     const payload = {
-      subscription_plan: CablesPlan,
-      smartcard_number: smartNumber,
+      amount: amount,
       phone_number: phoneNumber,
+      smartcard_number: smartNumber,
+      subscription_plan: subscriptionPlan,
       cable_type: cable,
-      amount: String(dataAmount),
       transaction_pin: pin,
       platform: "web",
     };
@@ -134,10 +101,10 @@ export default function CablePage() {
         setSuccessMessage(res.message);
         setShowSuccessModal(true);
 
-        setPhoneNumber("");
+        setSmartNumber("");
         setCable("");
-        setCablesPlan("");
-        setSelectedPlan("");
+        setSubscriptionPlan("");
+        setPhoneNumber("");
 
         queryClient.invalidateQueries({ queryKey: ["balance"] });
         queryClient.invalidateQueries({ queryKey: ["transactions"] });
@@ -154,29 +121,32 @@ export default function CablePage() {
     }
   }
 
-  const isValid = phoneNumber.length === 11 && cable !== "" && CablesPlan !== "";
+  const isValid = smartNumber.length >= 10 && cable !== "";
 
   return (
     <>
+      <Loader show={loading} />
+
       <ConfirmTransferModal
         isOpen={showConfirmModal}
-        
-        bankName={bankName}
+        name={name}
+        type={type}
+        cableType={cable}
+        smartNumber={smartNumber}
         onCancel={() => setShowConfirmModal(false)}
-        onConfirm={(amount, narration) => {
-          setTransferAmount(amount);
-          setNarration(narration || "");
+        onConfirm={(data) => {
+          setSubscriptionPlan(data.planCode);
+          setPhoneNumber(data.phoneNumber);
+          setAmount(data.amount);
+          setShowConfirmModal(false);
           setShowPinModal(true);
         }}
       />
 
-      <TransferPinModal
+      <SubscribePinModal
         isOpen={showPinModal}
-        onCancel={() => {
-          setShowPinModal(false);
-          setTransferAmount(null);
-        }}
-        onConfirm={(pin) => handleTransfer(pin)}
+        onCancel={() => setShowPinModal(false)}
+        onConfirm={(pin) => handleCablePayment(pin)}
       />
 
       <SuccessModal
@@ -185,18 +155,16 @@ export default function CablePage() {
         onClose={() => setShowSuccessModal(false)}
       />
 
-      <Loader show={loading} />
-
-      <div className="min-h-screen h-fit bg-muted">
-        <div className="max-w-5xl mx-auto p-0 md:p-4">
+      <div className="min-h-screen bg-muted">
+        <div className="max-w-5xl mx-auto">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-sm font-medium text-secondary hover:opacity-70">
+            className="flex cursor-pointer justify-center items-center gap-2 text-sm font-medium text-secondary hover:opacity-70 w-fit">
             <span className="text-lg">←</span>
             Back
           </button>
 
-          <div className="space-y-8 ">
+          <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h1 className="text-xl font-semibold text-primary">Buy Cable</h1>
               <button
@@ -205,128 +173,72 @@ export default function CablePage() {
                 History
               </button>
             </div>
+          </div>
 
-            {/* BALANCE CARD */}
-            <div className="rounded-2xl bg-linear-to-r from-primary to-secondary text-white px-8 py-6 flex items-center justify-between">
-              <div>
-                <p className="text-sm opacity-90">Subscribe to Cable</p>
-                <p className="font-semibold mt-1">Use your balance to subscribe to cable tv</p>
-                <button
-                  className="mt-4 bg-black text-white text-sm px-4 py-2 rounded-lg"
-                  onClick={() => {
-                    setOpen(true);
-                  }}>
-                  Add Money
-                </button>
-              </div>
-              <div className="text-3xl font-bold">₦{balance.toLocaleString()}</div>
+          {/* PROMO BANNER */}
+          <div className="rounded-2xl bg-linear-to-r my-10 from-primary to-secondary text-white px-8 lg:py-6 py-4 lg:flex items-center justify-between">
+            <div>
+              <p className="text-sm opacity-90">Subscribe to Cable</p>
+              <p className="font-semibold mt-1">Use your balance to subscribe to cable</p>
+              <div className="text-4xl font-bold lg:hidden mt-4">₦{balance}</div>
+              <button
+                className="mt-4 bg-black text-white text-sm px-4 py-2 rounded-lg"
+                onClick={() => {
+                  setOpen(true);
+                }}>
+                Add Money
+              </button>
             </div>
 
-            {/* FORM CARD */}
-            <div className="bg-background border border-border rounded-3xl md:p-10 p-5">
-              <h2 className="text-lg font-semibold text-primary mb-6">Recipient Details</h2>
+            <div className="text-4xl font-bold hidden lg:block">₦{balance.toLocaleString()}</div>
+          </div>
 
-              <div className="space-y-6">
-                {/* Cable */}
-                <div>
-                  <label className="text-sm font-medium text-secondary">Cable Operator</label>
-                  <div className="flex gap-6 mt-3">
-                    {cable_tv_providers.map((provider) => (
-                      <button
-                        type="button"
-                        key={provider.value}
-                        onClick={() => setCable(provider.value)}
-                        className={`p-2 rounded-xl ${
-                          cable === provider.value ? "bg-gray-100" : ""
-                        }`}>
-                        <Image
-                          src={provider.image}
-                          alt={provider.label}
-                          width={100}
-                          height={100}
-                          className={`${cable === provider.value ? "opacity-100" : "opacity-50"}`}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
+          {/* FORM */}
+          <div className="bg-background border border-border rounded-3xl p-5 md:p-10 max-w-6xl ">
+            <h2 className="text-lg font-semibold text-primary mb-6">Recipient Details</h2>
 
-                <div>
-                  <label className="text-sm font-medium text-secondary">Smart Card Number</label>
-                  <input
-                    value={smartNumber}
-                    maxLength={20}
-                    onChange={(e) => setSmartNumber(e.target.value.replace(/\D/g, ""))}
-                    placeholder="Enter smart card number"
-                    className="w-full h-12 px-4 rounded-xl border border-border mt-2 focus:outline-none focus:ring-2 focus:ring-secondary"
-                  />
-                </div>
-
-                {/* PHONE NUMBER */}
-                <div>
-                  <label className="text-sm font-medium text-secondary">Phone Number</label>
-                  <input
-                    value={phoneNumber}
-                    maxLength={11}
-                    onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ""))}
-                    placeholder="Enter phone number"
-                    className="w-full h-12 px-4 rounded-xl border border-border mt-2 focus:outline-none focus:ring-2 focus:ring-secondary"
-                  />
-                </div>
-
-                {/* DATA BUNDLES */}
-                <div>
-                  <label className="text-sm font-medium text-secondary">Cable Plan</label>
-
-                  <div ref={dropdownRef} className="mt-2">
+            {/* Cable Type */}
+            <div className="space-y-5">
+              <div>
+                <label className="text-sm font-medium">Cable Operator</label>
+                <div className="flex lg:gap-6 gap-2.5 mt-3">
+                  {cable_tv_providers.map((provider) => (
                     <button
-                      type="button"
-                      onClick={() => setCablePlan((prev) => !prev)}
-                      className="w-full bg-white p-3 rounded-xl border border-border text-left"
-                      disabled={!cable}>
-                      {selectedPlan || "Select a Cable Plan"}
+                      key={provider.value}
+                      onClick={() => setCable(provider.value)}
+                      className={`p-2 rounded-xl ${cable === provider.value ? "bg-gray-100" : ""}`}>
+                      <Image
+                        src={provider.image}
+                        alt={provider.label}
+                        width={100}
+                        height={100}
+                        className={cable === provider.value ? "opacity-100" : "opacity-50"}
+                      />
                     </button>
-
-                    {CablePlan && (
-                      <div className="mt-2 bg-white border border-border rounded-xl max-h-60 overflow-y-auto shadow-sm">
-                        {cablePlansData.length === 0 ? (
-                          <p className="p-4 text-sm text-secondary/50">No Cable Plan available</p>
-                        ) : (
-                          cablePlansData.map((bundle: CableSubscriptionData) => (
-                            <button
-                              key={bundle.name}
-                              type="button"
-                              onClick={() => {
-                                setSelectedPlan(bundle.name);
-                                setCablesPlan(bundle.code);
-                                setCablePlan(false);
-                                setDataAmount(parseInt(bundle.amount));
-                              }}
-                              className="flex justify-between items-center text-left w-full px-4 py-3 hover:bg-gray-100 text-sm">
-                              <span>{bundle.name}</span>
-                              <span className="text-primary">
-                                ₦{parseInt(bundle.amount).toLocaleString()}
-                              </span>
-                            </button>
-                          ))
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  ))}
                 </div>
-
-                {/* NEXT BUTTON */}
-                <button
-                  onClick={() => setShowPinModal(true)}
-                  disabled={!isValid}
-                  className={`w-full h-14 rounded-xl font-semibold transition ${
-                    isValid
-                      ? "bg-primary text-white hover:opacity-90"
-                      : "bg-primary/60 text-white cursor-not-allowed"
-                  }`}>
-                  Next
-                </button>
               </div>
+
+              {/* Smart Card */}
+              <div>
+                <label className="text-sm font-medium">Smart Card Number</label>
+                <input
+                  value={smartNumber}
+                  maxLength={20}
+                  onChange={(e) => setSmartNumber(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter smart card number"
+                  className="w-full h-12 px-4 rounded-xl mt-2 focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none border border-secondary/50"
+                />
+              </div>
+
+              <button
+                onClick={handleVerifyCable}
+                disabled={!isValid}
+                className={`w-full h-14 rounded-xl font-semibold ${
+                  isValid ? "bg-primary text-white" : "bg-primary/60 text-white cursor-not-allowed"
+                }`}>
+                Next
+              </button>
             </div>
           </div>
 
