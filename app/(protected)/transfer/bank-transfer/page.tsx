@@ -18,7 +18,7 @@ import AddMoneyDialog from "@/components/dialog/addMoney";
 
 export default function BankTransferPage() {
   const router = useRouter();
-  
+
   const [account, setAccount] = useState("");
   const [bankCode, setBankCode] = useState("");
   const [banks, setBanks] = useState<GetBanksData[]>([]);
@@ -216,8 +216,7 @@ export default function BankTransferPage() {
                     maxLength={10}
                     onChange={(e) => setAccount(e.target.value.replace(/\D/g, ""))}
                     placeholder="Enter 10-digit account number"
-                    className="w-full h-12 px-4 rounded-xl border border-border
-                focus:outline-none focus:ring-2 focus:ring-secondary"
+                    className="w-full h-12 px-4 rounded-xl focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none border border-secondary/50"
                   />
                   {errors && <p className="text-red-600 text-base">{errors}</p>}
                 </div>
@@ -225,7 +224,6 @@ export default function BankTransferPage() {
                 {/* BANK */}
                 <div className="space-y-1">
                   <label className="text-sm font-medium ">Bank</label>
-
                   <div className="w-full">
                     <Select
                       options={banks.map((b) => ({
@@ -246,17 +244,15 @@ export default function BankTransferPage() {
                         setBankName(selected?.label || "");
                       }}
                       isSearchable
-                      menuPortalTarget={typeof window !== "undefined" ? document.body : null}
-                      menuPosition="fixed"
                       styles={{
                         control: (base, state) => ({
                           ...base,
                           height: 48,
                           borderRadius: "12px",
-                          borderColor: state.isFocused ? "#6366f1" : "#e5e7eb",
+                          borderColor: state.isFocused ? "#EE8520" : "#e5e7eb",
                           boxShadow: "none",
                           paddingLeft: "4px",
-                          "&:hover": { borderColor: "#6366f1" },
+                          "&:hover": { borderColor: "#EE8520" },
                         }),
                         valueContainer: (base) => ({
                           ...base,
@@ -266,7 +262,7 @@ export default function BankTransferPage() {
                           ...base,
                           borderRadius: "12px",
                           overflow: "hidden",
-                          zIndex: 9999,
+                          zIndex: 10,
                         }),
                       }}
                     />

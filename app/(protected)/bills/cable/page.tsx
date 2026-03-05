@@ -206,7 +206,7 @@ export default function CablePage() {
                     <button
                       key={provider.value}
                       onClick={() => setCable(provider.value)}
-                      className={`p-2 rounded-xl ${cable === provider.value ? "bg-gray-100" : ""}`}>
+                      className={`p-2 rounded-xl cursor-pointer ${cable === provider.value ? "bg-gray-100" : ""}`}>
                       <Image
                         src={provider.image}
                         alt={provider.label}

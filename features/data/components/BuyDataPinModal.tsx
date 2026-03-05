@@ -34,7 +34,7 @@ export default function BuyDataPinModal({
           <button
             type="button"
             onClick={onCancel}
-            className="w-1/2 h-12 rounded-xl border border-gray-300 text-gray-600">
+            className="w-1/2 h-12 rounded-xl border border-gray-300 text-gray-600 cursor-pointer">
             Cancel
           </button>
 
@@ -42,7 +42,7 @@ export default function BuyDataPinModal({
             type="button"
             disabled={pin.length !== 4}
             onClick={() => onConfirm(pin)}
-            className={`w-1/2 h-12 rounded-xl font-semibold
+            className={`w-1/2 h-12 rounded-xl font-semibold cursor-pointer
               ${
                 pin.length !== 4
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"

@@ -13,7 +13,7 @@ type Props = {
 
 export default function BalanceCard({ balance, loading = false }: Props) {
   const { user } = UseUser();
-  const [balanceVisible, setBalanceVisible] = useState(true);
+  const [balanceVisible, setBalanceVisible] = useState(false);
 
   const toggleBalance = () => {
     setBalanceVisible((prev) => !prev);
@@ -45,10 +45,10 @@ export default function BalanceCard({ balance, loading = false }: Props) {
                 ? "Loading..."
                 : balanceVisible
                 ? `${user?.currency ?? "₦"}${balance}`
-                : "•••••••"}
+                : "₦ ••••"}
             </h1>
 
-            <button onClick={toggleBalance}>
+            <button onClick={toggleBalance} className="cursor-pointer">
               {balanceVisible ? (
                 <EyeOff size={28} />
               ) : (
@@ -68,7 +68,7 @@ export default function BalanceCard({ balance, loading = false }: Props) {
         <div className="relative rounded-2xl lg:p-6 p-0 min-w-65 space-y-4">
           <button
             onClick={copyAccount}
-            className="absolute lg:top-0 top-3 lg:right-4 right-0 text-xs bg-white/20 px-3 py-1.5 rounded-lg"
+            className="absolute lg:top-0 top-3 lg:right-4 right-0 text-xs bg-white/20 px-3 py-1.5 rounded-lg cursor-pointer"
           >
             Copy
           </button>

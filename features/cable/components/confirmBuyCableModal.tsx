@@ -205,7 +205,7 @@ export default function ConfirmTransferModal({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="w-1/2 border rounded-xl h-12"
+            className="w-1/2 border cursor-pointer rounded-xl h-12"
           >
             Cancel
           </button>
@@ -213,7 +213,7 @@ export default function ConfirmTransferModal({
           <button
             onClick={handleContinue}
             disabled={!isValid}
-            className={`w-1/2 rounded-xl h-12 font-semibold
+            className={`w-1/2 rounded-xl h-12 font-semibold cursor-pointer
               ${
                 !isValid
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"

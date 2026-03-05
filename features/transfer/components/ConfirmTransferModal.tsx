@@ -171,7 +171,7 @@ const isNarrationValid = narration.trim().length >= 3;
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="w-1/2 border rounded-xl h-12"
+            className="w-1/2 border rounded-xl h-12 cursor-pointer"
           >
             Cancel
           </button>
@@ -179,7 +179,7 @@ const isNarrationValid = narration.trim().length >= 3;
           <button
             onClick={handleConfirm}
             disabled={!isFormValid}
-            className={`w-1/2 rounded-xl h-12 font-semibold transition
+            className={`w-1/2 rounded-xl h-12 font-semibold transition cursor-pointer
               ${!isFormValid
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-primary text-white hover:opacity-90 cursor-pointer"

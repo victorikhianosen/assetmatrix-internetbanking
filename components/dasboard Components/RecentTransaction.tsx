@@ -25,7 +25,7 @@ export default function RecentTransaction({
       <div className="flex justify-between items-center w-full mb-6">
         <h3 className="font-semibold text-lg">Recent Transactions</h3>
         <button
-          className="text-sm font-medium text-secondary hover:-translate-x-1 transition hover:bg-primary hover:text-white bg-gray-100 rounded-xl py-2.5 px-5"
+          className="text-sm font-medium cursor-pointer text-secondary hover:-translate-x-1 transition hover:bg-primary hover:text-white bg-gray-100 rounded-xl py-2.5 px-5"
           onClick={() => {
             router.push("/transactions");
           }}>

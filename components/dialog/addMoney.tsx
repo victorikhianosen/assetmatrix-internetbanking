@@ -102,7 +102,7 @@ Account Number: ${user.accountno}
               <p className="font-semibold ">{user?.accountno}</p>
             </div>
 
-            <button onClick={copyAccountNumber} className="p-2 rounded-lg hover:bg-gray-100">
+            <button onClick={copyAccountNumber} className="p-2 cursor-pointer rounded-lg hover:bg-gray-100">
               <Copy size={18} />
             </button>
           </div>
@@ -110,7 +110,7 @@ Account Number: ${user.accountno}
           {/* Copy All Button */}
           <button
             onClick={copyAllDetails}
-            className="w-full mt-4 bg-primary text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
+            className="w-full mt-4 bg-primary cursor-pointer text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
             Copy All Details
           </button>
         </div>
