@@ -51,15 +51,15 @@ export default function QuickAction() {
           <Link
             key={item.label}
             href={item.href}
-            className="bg-white rounded-2xl p-5 text-center hover:shadow-md hover:-translate-x-1 transition cursor-pointer"
+            className="bg-white rounded-2xl lg:p-5 p-4 text-center hover:shadow-md hover:-translate-x-1 transition cursor-pointer"
           >
             <div
               style={{ backgroundColor: item.bgColor }}
-              className="mx-auto w-15 h-15 mb-3 rounded-full flex items-center justify-center"
+              className="mx-auto lg:w-15 w-13 lg:h-15 h-13 mb-3 rounded-full flex items-center justify-center"
             >
-              <IconComponent size={30} color={item.color} />
+              <IconComponent className="lg:h-8 lg:w-8 w-7 h-7" color={item.color} />
             </div>
-            <p className=" text-secondary">{item.label}</p>
+            <p className="text-secondary">{item.label}</p>
           </Link>
         );
       })}

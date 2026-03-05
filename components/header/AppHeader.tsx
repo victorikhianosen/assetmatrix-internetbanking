@@ -14,7 +14,7 @@ export default function AppHeader() {
 
   return (
     <header className="bg-background">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-3 py-3 flex justify-between items-center">
         {/* LEFT */}
         <div className="flex items-center gap-3">
           <Link href="/dashboard">
@@ -39,8 +39,8 @@ export default function AppHeader() {
               <span className="flex items-center gap-2">
                 {user?.profilepic ? (
                   <Image
-                    src={user.profilepic}
-                    alt="Passport Preview"
+                    src={user?.profilepic}
+                    alt={user?.first_name}
                     width={100}
                     height={100}
                     className="w-8 h-8 rounded-full object-cover"
@@ -51,7 +51,7 @@ export default function AppHeader() {
                     {user?.first_name?.[0] || ""}
                   </div>
                 )}
-                {firstName ?? "User"}
+                <p className="hidden md:flex">{firstName ?? "User"}</p>
               </span>
 
               <svg

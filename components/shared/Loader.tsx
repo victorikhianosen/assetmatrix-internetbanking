@@ -19,7 +19,7 @@ export default function Loader({ show }: Props) {
                 bg-black/50
                 pointer-events-auto
             ">
-      <div className="bg-background rounded-xl shadow-xl p-8 w-full max-w-sm text-center relative">
+      <div className="bg-background rounded-xl shadow-xl p-8 w-full max-w-sm m-5 lg:m-0 text-center relative">
         {/* LOGO + PING */}
         <div className="flex justify-center mb-8 pt-4">
           <div className="relative w-20 h-20 flex items-center justify-center">

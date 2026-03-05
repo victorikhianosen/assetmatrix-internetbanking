@@ -23,7 +23,7 @@ export default function RecentTransaction({
   return (
     <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 w-full">
       <div className="flex justify-between items-center w-full mb-6">
-        <h3 className="font-semibold text-lg mb-5">Recent Transactions</h3>
+        <h3 className="font-semibold text-lg">Recent Transactions</h3>
         <button
           className="text-sm font-medium text-secondary hover:-translate-x-1 transition hover:bg-primary hover:text-white bg-gray-100 rounded-xl py-2.5 px-5"
           onClick={() => {
