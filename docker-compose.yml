@@ -6,6 +6,6 @@ services:
     container_name: assetmatrix_internetbanking
     restart: always
     ports:
-      - "3001:3000"
+      - "3000:3000"
     env_file:
       - .env
