@@ -1,12 +1,16 @@
 import { UseUser } from "@/context/UserContext";
 import { serverLogout } from "../../app/actions/auth/login/logout.action";
+import { toast } from "react-toastify";
 
- const logout = () => {
+const logout = () => {
   localStorage.removeItem("access_token");
-  window.location.href = "/login";
-  const {clearUser} = UseUser();
+  toast.success("Logout successfully");
+  setTimeout(() => {
+    window.location.href = "/login";
+  }, 1000);
+  const { clearUser } = UseUser();
   clearUser();
-  serverLogout()
+  serverLogout();
 };
 
 export async function fetchBalance() {

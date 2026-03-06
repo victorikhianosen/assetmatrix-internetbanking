@@ -13,11 +13,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: {
-      allowedOrigins: ["localhost:3005", "jxmzkwg8-3005.uks1.devtunnels.ms"],
-    },
-  },
 };
 
 export default nextConfig;

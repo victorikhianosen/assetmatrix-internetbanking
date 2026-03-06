@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { serverLogout } from "../../../app/actions/auth/login/logout.action";
 import { UseUser } from "../../../context/UserContext";
 import { LogOut } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function Logout() {
   const router = useRouter();
@@ -12,8 +13,11 @@ export default function Logout() {
   async function handleLogout() {
     serverLogout();
     localStorage.clear();
-    router.replace("/login");
     clearUser();
+    toast.success("Logout successfully");
+    setTimeout(() => {
+      router.replace("/login");
+    }, 1000);
   }
 
   return (
