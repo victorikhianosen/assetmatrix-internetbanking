@@ -34,8 +34,14 @@ export default function LoginPage() {
     --------------------------------------------------- */
   useEffect(() => {
     let id = localStorage.getItem("device_id");
+
     if (!id) {
-      id = crypto.randomUUID();
+      if (typeof crypto !== "undefined" && crypto.randomUUID) {
+        id = crypto.randomUUID();
+      } else {
+        id = "web-" + Math.random().toString(36).substring(2, 15);
+      }
+
       localStorage.setItem("device_id", id);
     }
     setDeviceId(id);
@@ -135,7 +141,7 @@ export default function LoginPage() {
 
       <div className="min-h-screen flex bg-[#F7F7F7]">
         <SideBar />
-        
+
         <div className="w-full md:w-1/2 flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <div className="flex justify-center mb-8">

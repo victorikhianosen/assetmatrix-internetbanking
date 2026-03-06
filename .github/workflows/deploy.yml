@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /var/www/pakasso/pakasso-internetbanking
+            cd /var/www/assetmatrix/assetmatrix-internetbanking
 
             git pull origin main
 

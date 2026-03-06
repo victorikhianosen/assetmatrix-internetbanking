@@ -1,9 +1,11 @@
+name: assetmatrix-internetbanking
+
 services:
   app:
     build: .
-    container_name: pakasso_internetbanking
+    container_name: assetmatrix_internetbanking
     restart: always
     ports:
-      - "3006:3006"
+      - "3000:3000"
     env_file:
       - .env
