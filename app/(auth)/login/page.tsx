@@ -34,7 +34,6 @@ export default function LoginPage() {
     --------------------------------------------------- */
   useEffect(() => {
     let id = localStorage.getItem("device_id");
-    let id = localStorage.getItem("device_id");
 
     if (!id) {
       if (typeof crypto !== "undefined" && crypto.randomUUID) {
