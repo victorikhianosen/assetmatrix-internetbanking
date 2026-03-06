@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Brand colors */
+  --primary: #EE8520;
+  --primary-foreground: #ffffff;
+
+  --secondary: #000000;
+  --secondary-foreground: #29333f;
+
+
+  --muted: #f7f7f7;
+  --border: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-roboto);
+  --font-mono: var(--font-geist-mono);
+
+   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-border: var(--border)
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --background: #0a0a0a;
+    --foreground: #ededed;
+
+        --primary: #ffffff;
+    --primary-foreground: #0a0a0a;
+
+    --secondary: #fee028;
+    --secondary-foreground: #0a0a0a;
+
+    --muted: #111111;
+    --border: #222222; */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-optical-sizing: auto;
+  box-sizing: border-box;
+  font-family: var(--font-roboto), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;;
+}
+
+
+.hideNumberSpinnerStyles {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
