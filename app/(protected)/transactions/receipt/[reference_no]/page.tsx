@@ -79,18 +79,18 @@ export default function ReceiptPage() {
                   />
                 </div>
               )}
-              {receipt?.data.status === "Failed" && (
+              {receipt?.data.status === "failed" && (
                 <div>
                   <Lottie
                     animationData={failedAnimation}
                     loop
                     autoplay
-                    style={{ width: 250, height: 250, marginBottom: -50, marginTop: -50 }}
+                    style={{ width: 250, height: 250, marginBottom: -20, marginTop: -20 }}
                   />
                 </div>
               )}
               <h1
-                className={`text-3xl font-bold pt-3 ${receipt?.data.status === "success" && "text-green-500"} ${receipt?.data.status === "Failed" && "text-red-500"} ${receipt?.data.status === "processing" && "text-yellow-500"}`}>
+                className={`text-3xl font-bold pt-3 ${receipt?.data.status === "success" && "text-green-500"} ${receipt?.data.status === "failed" && "text-red-500"} ${receipt?.data.status === "processing" && "text-yellow-500"}`}>
                 {receipt?.data.status}
               </h1>
               <p className="text-2xl font-bold pt-1 pb-5">
