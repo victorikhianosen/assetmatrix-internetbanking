@@ -111,7 +111,7 @@ export default function PhoneSetup() {
     <>
       <Loader show={loading} />
 
-      <div className="min-h-screen flex bg-[#F7F7F7]">
+      <div className="min-h-screen flex bg-muted">
         {/* LEFT PANEL */}
         <SideBar />
 
@@ -131,7 +131,7 @@ export default function PhoneSetup() {
 
             {/* TITLE */}
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-primary">
+              <h2 className="text-xl font-semibold text-secondary">
                 Join our digital banking platform
               </h2>
               <p className="text-sm text-gray-500">

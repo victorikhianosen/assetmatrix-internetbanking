@@ -96,7 +96,7 @@ export default function BvnPage() {
 
             {/* TITLE */}
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-primary">BVN Verification</h2>
+              <h2 className="text-xl font-semibold text-secondary">BVN Verification</h2>
               <p className="text-sm text-secondary/50">
                 Enter your Bank Verification Number to continue
               </p>
