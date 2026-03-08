@@ -139,7 +139,7 @@ export default function LoginPage() {
     <>
       <Loader show={loading} />
 
-      <div className="min-h-screen flex bg-[#F7F7F7]">
+      <div className="min-h-screen flex bg-muted">
         <SideBar />
 
         <div className="w-full md:w-1/2 flex items-center justify-center px-6">
@@ -155,7 +155,7 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-primary">Login to your account</h2>
+              <h2 className="text-xl font-semibold text-secondary">Login to your account</h2>
               <p className="text-sm text-secondary/50">Enter your details</p>
             </div>
 
