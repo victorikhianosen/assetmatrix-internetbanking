@@ -67,3 +67,34 @@ export type BuyAirtime = {
   transaction_pin: string;
   platform: string;
 };
+
+export type ElectricityDisco = {
+  status: string;
+  responseCode: string;
+  message: string;
+  data: ElectricityDiscoData[];
+};
+
+export type ElectricityDiscoData = {
+  name: string;
+  value: string;
+};
+
+export type VerifyMeterNumberRequest = {
+  meter_number: "45067208137";
+  disco: "ikeja-electric";
+  meter_type: "prepaid";
+};
+
+export type VerifyMeterNumberResponse = {
+  status: "success";
+  responseCode: "000";
+  message: "Meter Verify fetched successfully";
+  data: {
+    name: "AMUDALAT ADELEYE";
+    address: "39A, AINA STREET, OJODU";
+    type: "prepaid";
+    arrears: "0";
+    Meter_Number: "45067208137";
+  };
+};
