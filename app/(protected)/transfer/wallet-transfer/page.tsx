@@ -24,7 +24,7 @@ export default function WalletTransferPage() {
   const [open, setOpen] = useState(false);
 
   const [accountNumber, setAccountNumber] = useState("");
-  const bankName = "Pakasso Credit Capital Ltd";
+  const bankName = "Asset Matrix MFB";
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
@@ -239,8 +239,8 @@ export default function WalletTransferPage() {
                     maxLength={10}
                     onChange={(e) => setAccount(e.target.value.replace(/\D/g, ""))}
                     placeholder="Enter 10-digit account number"
-                    className="w-full h-12 px-4 rounded-xl border border-border
-                focus:outline-none focus:ring-2 focus:ring-secondary"
+                    className="w-full h-12 px-4 rounded-xl
+                focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none border border-secondary/50"
                   />
                   {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
                 </div>

@@ -20,7 +20,6 @@ export default function ConfirmTransferModal({
   onCancel,
   onConfirm,
 }: ConfirmTransferModalProps) {
-
   const MIN_TRANSFER = 10;
 
   const [rawAmount, setRawAmount] = useState("");
@@ -30,8 +29,11 @@ export default function ConfirmTransferModal({
 
   /* ---------------- FETCH BALANCE ---------------- */
 
-  const {data: balance} = UseGetBalance();
+  const { data: balanceData } = UseGetBalance();
+  const balance = Number(balanceData?.data?.balance ?? 0);
+
   /* ---------------- FORMAT ---------------- */
+
   const formatAmount = (value: string) => {
     if (!value) return "";
     const [intPart, decimalPart] = value.split(".");
@@ -39,72 +41,79 @@ export default function ConfirmTransferModal({
     return decimalPart !== undefined ? `${formattedInt}.${decimalPart}` : formattedInt;
   };
 
-  const validateNarration = (text: string) => {
-    if (!text.trim()) return "Narration is required";
-  if (text.trim().length < 3) return "Narration is too short";
-    return "";
-  };
-
-
   /* ---------------- SAFE PARSE ---------------- */
+
   const parseAmount = (value: string) => {
-    if (!value) return NaN;
+    if (!value) return 0;
     const clean = value.replace(/,/g, "");
-    return Math.round(Number(clean) * 100) / 100; // avoid float bugs
+    return Number(clean);
   };
 
-  /* ---------------- VALIDATION ---------------- */
-  const validate = (amount: number) => {
+  /* ---------------- VALIDATE AMOUNT ---------------- */
+
+  const validateAmount = (amount: number) => {
+    if (!amount) return "Amount is required";
+
     if (isNaN(amount)) return "Invalid amount";
+
     if (amount < MIN_TRANSFER)
-      return `Minimum transfer amount is ₦${MIN_TRANSFER}.00`;
-    if (amount > Number(balance))
-      return "Insufficient funds";
+      return `Minimum transfer amount is ₦${MIN_TRANSFER}`;
+
+    if (amount > balance) return "Insufficient balance";
+
     return "";
   };
 
-  const handleChange = (input: string) => {
-    const clean = input.replace(/,/g, "");
+  /* ---------------- INPUT CHANGE ---------------- */
 
-    // allow only valid money input
+  const handleChange = (value: string) => {
+    const clean = value.replace(/,/g, "");
+
+    // allow numbers + 2 decimal places
     if (!/^\d*\.?\d{0,2}$/.test(clean)) return;
 
     setRawAmount(clean);
 
     const parsed = parseAmount(clean);
-    setAmountError(validate(parsed));
+
+    const error = validateAmount(parsed);
+
+    setAmountError(error);
   };
 
-  /* ---------------- BUTTON LOGIC (SINGLE SOURCE) ---------------- */
-  const parsedAmount = parseAmount(rawAmount);
-  const errorMessage = rawAmount ? validate(parsedAmount) : "";
-const isNarrationValid = narration.trim().length >= 3;
-  const isAmountValid = rawAmount !== "" && !errorMessage;
-  const isFormValid = isAmountValid && isNarrationValid;
+  /* ---------------- NARRATION VALIDATION ---------------- */
 
+  const validateNarration = (text: string) => {
+    if (!text.trim()) return "Narration is required";
+    if (text.trim().length < 3) return "Narration must be at least 3 characters";
+    return "";
+  };
+
+  const parsedAmount = parseAmount(rawAmount);
+
+  const isFormValid =
+    rawAmount !== "" &&
+    !amountError &&
+    narration.trim().length >= 3;
 
   /* ---------------- CONFIRM ---------------- */
+
   const handleConfirm = () => {
     const narrationErr = validateNarration(narration);
     setNarrationError(narrationErr);
 
-    if (!isAmountValid || narrationErr) return;
+    if (!isFormValid || narrationErr) return;
 
-    onConfirm(parsedAmount, narration?.trim() || undefined);
-
-
-    if (narrationErr) {
-      document.querySelector("textarea")?.focus();
-      return;
-    }
+    onConfirm(parsedAmount, narration.trim());
   };
 
-
-
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 ${isOpen ? "block" : "hidden"}`}>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 ${
+        isOpen ? "block" : "hidden"
+      }`}
+    >
       <div className="bg-white rounded-2xl w-full max-w-lg p-8">
-
         <h3 className="text-lg font-semibold text-primary mb-2">
           Confirm Transfer
         </h3>
@@ -130,6 +139,7 @@ const isNarrationValid = narration.trim().length >= 3;
         {/* Amount */}
         <div className="mb-4">
           <label className="text-sm font-medium">Amount</label>
+
           <input
             value={formatAmount(rawAmount)}
             onChange={(e) => handleChange(e.target.value)}
@@ -137,17 +147,16 @@ const isNarrationValid = narration.trim().length >= 3;
             placeholder="₦0.00"
           />
 
-          {(amountError || errorMessage) && (
-            <p className="text-xs text-red-600 mt-1">
-              {amountError || errorMessage}
-            </p>
+          {amountError && (
+            <p className="text-sm text-red-600 mt-1">{amountError}</p>
           )}
+
         </div>
 
         {/* Narration */}
         <div className="mb-6">
           <label className="text-sm font-medium">
-            Narration <span className="text-red-600 text-lg">*</span>
+            Narration <span className="text-red-600">*</span>
           </label>
 
           <textarea
@@ -161,10 +170,10 @@ const isNarrationValid = narration.trim().length >= 3;
             rows={3}
             className="w-full mt-2 px-4 py-3 rounded-xl border resize-none"
           />
-          {narrationError && (
-            <p className="text-xs text-red-600 mt-1">{narrationError}</p>
-          )}
 
+          {narrationError && (
+            <p className="text-sm text-red-600 mt-1">{narrationError}</p>
+          )}
         </div>
 
         {/* Buttons */}
@@ -179,11 +188,12 @@ const isNarrationValid = narration.trim().length >= 3;
           <button
             onClick={handleConfirm}
             disabled={!isFormValid}
-            className={`w-1/2 rounded-xl h-12 font-semibold transition cursor-pointer
-              ${!isFormValid
+            className={`w-1/2 rounded-xl h-12 font-semibold transition
+            ${
+              !isFormValid
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-primary text-white hover:opacity-90 cursor-pointer"
-              }`}
+                : "bg-primary text-white hover:opacity-90"
+            }`}
           >
             Continue
           </button>
