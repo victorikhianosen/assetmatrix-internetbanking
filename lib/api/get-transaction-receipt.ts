@@ -1,5 +1,8 @@
+import { smartFetch } from "@/lib/smartFetch";
+
+
 export async function fetchTransactionReceipt(referenceNo: string) {
-  const res = await fetch(`/api/transaction/receipt?reference_no=${referenceNo}`, {
+  const res = await smartFetch(`/api/transaction/receipt?reference_no=${referenceNo}`, {
     headers: {
       Accept: "application/json",
     },

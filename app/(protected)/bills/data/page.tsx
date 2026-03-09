@@ -48,7 +48,6 @@ export default function DataPage() {
 
   const { data: dataBundlesData } = useGetDataBundles(network);
   const dataBundles = dataBundlesData?.data ?? [];
-  console.log(dataBundles)
 
   // Reset bundle when network changes
   useEffect(() => {

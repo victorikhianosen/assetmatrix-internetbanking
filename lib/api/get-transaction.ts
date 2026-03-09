@@ -1,5 +1,8 @@
+import { smartFetch } from "@/lib/smartFetch";
+
+
 export async function fetchTransactions() {
-  const res = await fetch("/api/transaction", {
+  const res = await smartFetch("/api/transaction", {
     headers: {
       Accept: "application/json",
     },

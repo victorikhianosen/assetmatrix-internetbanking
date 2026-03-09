@@ -1,28 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import AppHeader from "@/components/header/AppHeader";
 import { UseUser } from "@/context/UserContext";
 import { UseGetUserDetails } from "@/hooks/useUserDetails";
-import Providers from "@/providers/contextProvider";
-import { useEffect } from "react";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <Providers>
-      <ProtectedContent>{children}</ProtectedContent>
-    </Providers>
-  );
+  return <ProtectedContent>{children}</ProtectedContent>;
 }
 
 function ProtectedContent({ children }: { children: React.ReactNode }) {
   const { setUser } = UseUser();
   const { data } = UseGetUserDetails();
+  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("access_token");
+    setToken(storedToken);
+
+    if (!storedToken) {
+      router.replace("/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (data) {
       setUser(data.data);
     }
   }, [data, setUser]);
+
+  if (token === null) return null;
 
   return (
     <div className="min-h-screen bg-muted">

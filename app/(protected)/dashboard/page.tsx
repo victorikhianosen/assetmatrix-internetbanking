@@ -7,12 +7,9 @@ import RecentTransaction from "../../../components/dasboard Components/RecentTra
 import { UseGetBalance } from "@/hooks/useBalance";
 import { useGetTransactions } from "@/hooks/useTransactions";
 import { TransactionItem } from "@/types/transaction.types";
-import { UseUser } from "@/context/UserContext";
 
 export default function DashboardPage() {
   const { data: balanceData, isLoading: balanceLoading } = UseGetBalance();
-  const { user } = UseUser();
-    console.log(user)
 
   const { data: transactionData, isLoading: trxLoading } = useGetTransactions();
 

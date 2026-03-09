@@ -1,5 +1,8 @@
+import { smartFetch } from "@/lib/smartFetch";
+
+
 export async function fetchUserDetails() {
-  const res = await fetch("/api/user", {
+  const res = await smartFetch("/api/user", {
     headers: {
       Accept: "application/json",
     },

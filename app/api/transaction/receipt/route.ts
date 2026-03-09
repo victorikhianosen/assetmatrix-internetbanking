@@ -43,8 +43,7 @@ export async function GET(req: Request) {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch (error) {
-    console.error("ROUTE ERROR:", error);
+  } catch  {
 
     return NextResponse.json(
       {

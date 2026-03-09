@@ -51,8 +51,7 @@ export async function GET() {
     }
 
     return NextResponse.json(JSON.parse(text));
-  } catch (err) {
-    console.error("ROUTE ERROR:", err);
+  } catch  {
 
     return NextResponse.json(
       {

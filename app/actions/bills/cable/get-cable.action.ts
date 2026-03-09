@@ -16,7 +16,6 @@ export async function getCable(cable: string) {
   }
 
   try {
-    console.log(cable);
     const res = await fetch(`${baseUrl}/api/vas/cable/get-subscriptions`, {
       method: "POST",
       headers: privateHeaders(token),
@@ -25,8 +24,7 @@ export async function getCable(cable: string) {
     });
 
     return await res.json();
-  } catch (error) {
-    console.log(error);
+  } catch  {
     return {
       responseCode: "500",
       message: "Network error",

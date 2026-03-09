@@ -1,6 +1,8 @@
 import { UseUser } from "@/context/UserContext";
 import { serverLogout } from "../../app/actions/auth/login/logout.action";
 import { toast } from "react-toastify";
+import { smartFetch } from "@/lib/smartFetch";
+
 
 const logout = () => {
   localStorage.removeItem("access_token");
@@ -14,7 +16,7 @@ const logout = () => {
 };
 
 export async function fetchBalance() {
-  const res = await fetch("/api/balance", {
+  const res = await smartFetch("/api/balance", {
     headers: { Accept: "application/json" },
     credentials: "include",
   });
