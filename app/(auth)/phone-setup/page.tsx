@@ -116,7 +116,7 @@ export default function PhoneSetup() {
         <SideBar />
 
         {/* RIGHT PANEL */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             {/* LOGO */}
             <div className="flex justify-center mb-8">

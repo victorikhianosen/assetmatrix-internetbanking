@@ -54,10 +54,46 @@ export default function PhoneVerificationPage() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === "Backspace" || e.key === "Delete") {
+      const updated = [...otp];
+
+      // If current box has value → clear it
+      if (otp[index]) {
+        updated[index] = "";
+        setOtp(updated);
+        return;
+      }
+
+      // If empty → move to previous box
+      if (index > 0) {
+        updated[index - 1] = "";
+        setOtp(updated);
+        const prev = document.getElementById(`otp-${index - 1}`);
+        prev?.focus();
+      }
+    }
+  };
+
   const handleOtpChange = (value: string, index: number) => {
-    if (!/^\d?$/.test(value)) return;
+    if (!/^\d*$/.test(value)) return;
 
     const updated = [...otp];
+
+    // Handle paste (e.g. 123456)
+    if (value.length > 1) {
+      const values = value.slice(0, 6).split("");
+      values.forEach((v, i) => {
+        updated[i] = v;
+      });
+      setOtp(updated);
+
+      const lastIndex = Math.min(values.length - 1, 5);
+      document.getElementById(`otp-${lastIndex}`)?.focus();
+      return;
+    }
+
     updated[index] = value;
     setOtp(updated);
 
@@ -138,7 +174,7 @@ export default function PhoneVerificationPage() {
       <Loader show={loading} />
       <div className="min-h-screen flex bg-[#F7F7F7]">
         <SideBar />
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <div className="flex justify-center mb-8">
               <Image
@@ -166,6 +202,7 @@ export default function PhoneVerificationPage() {
                     maxLength={1}
                     value={d}
                     onChange={(e) => handleOtpChange(e.target.value, i)}
+                    onKeyDown={(e) => handleKeyDown(e, i)}
                     className="w-12 h-14 text-center text-xl border rounded-xl text-black transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                   />
                 ))}

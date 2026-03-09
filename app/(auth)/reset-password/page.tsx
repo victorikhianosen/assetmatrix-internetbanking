@@ -224,7 +224,7 @@ export default function ResetPasswordPage() {
       <div className="min-h-screen flex bg-muted">
         <SideBar />
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <div className="flex justify-center mb-8">
               <Image
@@ -253,7 +253,7 @@ export default function ResetPasswordPage() {
                         value={digit}
                         onChange={(e) => handleOtpChange(e.target.value, i)}
                         onKeyDown={(e) => handleKeyDown(e, i)}
-                        className="w-12 h-14 text-center text-xl border rounded-xl text-black transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
+                        className="w-12 h-14 cursor-pointer text-center text-xl border rounded-xl text-black transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                       />
                     ))}
                   </div>
@@ -262,7 +262,7 @@ export default function ResetPasswordPage() {
                     type="button"
                     onClick={handleOtpNext}
                     disabled={!otpValid}
-                    className="w-full py-3 rounded-lg bg-primary text-white font-semibold disabled:opacity-50">
+                    className="w-full py-3 cursor-pointer rounded-lg bg-primary text-white font-semibold disabled:opacity-50">
                     Next
                   </button>
                 </>
@@ -302,14 +302,14 @@ export default function ResetPasswordPage() {
                     <button
                       type="button"
                       onClick={handleBackToOtp}
-                      className="w-1/2 py-3 rounded-lg border">
+                      className="w-1/2 cursor-pointer py-3 rounded-lg border">
                       Back
                     </button>
 
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-1/2 py-3 rounded-lg bg-primary text-white font-semibold disabled:opacity-50">
+                      className="w-1/2 cursor-pointer py-3 rounded-lg bg-primary text-white font-semibold disabled:opacity-50">
                       Reset Password
                     </button>
                   </div>

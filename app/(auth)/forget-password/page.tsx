@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
       <div className="min-h-screen flex bg-muted">
         <SideBar />
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             {/* LOGO */}
             <div className="flex justify-center mb-8">

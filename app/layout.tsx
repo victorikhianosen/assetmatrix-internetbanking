@@ -54,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased ${roboto.variable}`}>
+      <body suppressHydrationWarning className={`antialiased ${roboto.variable}`}>
         <Providers>
           {children}
           <ToastContainer position="top-right" />

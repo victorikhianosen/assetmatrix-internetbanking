@@ -50,6 +50,7 @@ const normalizeGender = (gender: string) => (gender ? gender.toLowerCase() : "")
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [showConfirmPin, setShowConfirmPin] = useState(false);
 
@@ -111,19 +112,26 @@ export default function RegisterPage() {
      HANDLER
   ================================ */
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  let newValue = value;
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: undefined,
-    }));
-  };
+  // PIN fields → allow only digits and max 4
+  if (name === "pin" || name === "confirm_pin") {
+    newValue = value.replace(/\D/g, "").slice(0, 4);
+  }
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: newValue,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    [name]: undefined,
+  }));
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,9 +139,19 @@ export default function RegisterPage() {
     const newErrors: FormErrors = {};
 
     if (!form.email) newErrors.email = "Email is required";
-    if (!form.password) newErrors.password = "Password is required";
-    if (form.password !== form.confirm_password)
-      newErrors.confirm_password = "Passwords do not match";
+   if (!form.password) {
+  newErrors.password = "Password is required";
+} else if (form.password.length < 8) {
+  newErrors.password = "Password must be at least 8 characters";
+}
+
+if (!form.confirm_password) {
+  newErrors.confirm_password = "Confirm password is required";
+} else if (form.confirm_password.length < 8) {
+  newErrors.confirm_password = "Confirm password must be at least 8 characters";
+} else if (form.password !== form.confirm_password) {
+  newErrors.confirm_password = "Passwords do not match";
+}
 
     if (!/^\d{4}$/.test(form.pin)) newErrors.pin = "PIN must be exactly 4 digits";
 
@@ -205,10 +223,15 @@ export default function RegisterPage() {
     <>
       <Loader show={loading} />
 
-      <div className="min-h-screen flex bg-[#F7F7F7]">
-        <SideBar />
+<div className="min-h-screen bg-[#F7F7F7] flex overflow-x-hidden">
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+  {/* FIXED SIDEBAR */}
+  <div className="hidden lg:block w-1/2 fixed left-0 top-0 h-screen">
+    <SideBar />
+  </div>
+
+  {/* FORM SECTION */}
+  <div className="w-full lg:w-1/2 lg:ml-auto flex items-start justify-center px-6 pb-12 pt-12 overflow-y-auto">
           <div className="w-full max-w-3xl">
             {/* LOGO */}
             <div className="flex justify-center mb-8">
@@ -230,51 +253,47 @@ export default function RegisterPage() {
             {/* FORM */}
 
             <form onSubmit={handleSubmit} className="space-y-4 grid grid-cols-2 gap-6">
+
+              {/* FIRST NAME */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">First Name</label>
                 <input
                   name="first_name"
-                  placeholder="First name"
                   value={form.first_name}
-                  onChange={handleChange}
                   readOnly
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.first_name ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.first_name ? "border-red-600" : ""
+                    }`}
                 />
                 {errors.first_name && (
                   <span className="text-red-600 text-md mt-1">{errors.first_name}</span>
-                )}{" "}
+                )}
               </div>
 
+              {/* LAST NAME */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">Last Name</label>
                 <input
                   name="last_name"
-                  placeholder="Last name"
                   value={form.last_name}
-                  onChange={handleChange}
                   readOnly
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.last_name ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.last_name ? "border-red-600" : ""
+                    }`}
                 />
-
-                {errors.username && (
-                  <span className="text-red-600 text-md mt-1">{errors.last_name}</span>
-                )}
               </div>
 
+              {/* PHONE */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">Phone Number</label>
                 <input
                   name="phone"
-                  placeholder="Phone number"
-                  inputMode="numeric"
-                  maxLength={11}
                   value={form.phone}
                   readOnly
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.phone ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.phone ? "border-red-600" : ""
+                    }`}
                 />
-                {errors.phone && <span className="text-red-600 text-md mt-1">{errors.phone}</span>}
               </div>
 
+              {/* EMAIL */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">Email Address</label>
                 <input
@@ -283,56 +302,60 @@ export default function RegisterPage() {
                   placeholder="Email address"
                   value={form.email}
                   onChange={handleChange}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.email ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.email ? "border-red-600" : ""
+                    }`}
                 />
-                {errors.email && <span className="text-red-600 text-md mt-1">{errors.email}</span>}
+                {errors.email && (
+                  <span className="text-red-600 text-md mt-1">{errors.email}</span>
+                )}
               </div>
 
+              {/* BVN */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">
                   Bank Verification Number (BVN)
                 </label>
                 <input
                   name="bvn"
-                  placeholder="Bank Verification Number (BVN)"
                   value={form.bvn}
                   readOnly
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.bvn ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.bvn ? "border-red-600" : ""
+                    }`}
                 />
-
-                {errors.bvn && <span className="text-red-600 text-md mt-1">{errors.bvn}</span>}
               </div>
 
+              {/* DOB */}
               <div className="col-span-2 md:col-span-1">
-                <label className="block text-sm font-medium text-primary mb-1">Date of Birth</label>
+                <label className="block text-sm font-medium text-primary mb-1">
+                  Date of Birth
+                </label>
                 <input
                   name="dob"
                   type="date"
                   value={form.dob}
-                  onChange={handleChange}
                   readOnly
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.dob ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.dob ? "border-red-600" : ""
+                    }`}
                 />
-
-                {errors.dob && <span className="text-red-600 text-md mt-1">{errors.dob}</span>}
               </div>
 
+              {/* GENDER */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">Gender</label>
                 <select
                   name="gender"
                   value={form.gender}
                   onChange={handleChange}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.gender ? "border-red-600" : ""}`}>
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.gender ? "border-red-600" : ""
+                    }`}
+                >
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
-                {errors.gender && (
-                  <span className="text-red-600 text-md mt-1">{errors.gender}</span>
-                )}
               </div>
 
+              {/* USERNAME */}
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-primary mb-1">Username</label>
                 <input
@@ -340,12 +363,12 @@ export default function RegisterPage() {
                   placeholder="Username"
                   value={form.username}
                   onChange={handleChange}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${errors.username ? "border-red-600" : ""}`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 ${errors.username ? "border-red-600" : ""
+                    }`}
                 />
-                {errors.username && (
-                  <span className="text-red-600 text-md mt-1">{errors.username}</span>
-                )}
               </div>
+
+              {/* PASSWORD */}
               <div className="col-span-2 md:col-span-1 relative">
                 <label className="block text-sm font-medium text-primary mb-1">Password</label>
                 <input
@@ -354,40 +377,41 @@ export default function RegisterPage() {
                   placeholder="Password (min 8 characters)"
                   value={form.password}
                   onChange={handleChange}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" pr-10 ${
-                    errors.password ? "border-red-600" : ""
-                  }`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${errors.password ? "border-red-600" : ""
+                    }`}
                 />
+
                 <span
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-10 cursor-pointer text-secondary/50">
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </span>
-                {errors.password && (
-                  <span className="text-red-600 text-md mt-1">{errors.password}</span>
-                )}
               </div>
 
-              <div className="col-span-2 md:col-span-1">
+              {/* CONFIRM PASSWORD */}
+              <div className="col-span-2 md:col-span-1 relative">
                 <label className="block text-sm font-medium text-primary mb-1">
                   Confirm Password
                 </label>
-                <input
-                  name="confirm_password"
-                  type="password"
-                  placeholder="Confirm Password (min 8 characters)"
-                  value={form.confirm_password}
-                  onChange={handleChange}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" ${
-                    errors.confirm_password ? "border-red-600" : ""
-                  }`}
-                />
+            <input
+  name="confirm_password"
+  type={showConfirmPassword ? "text" : "password"}
+  placeholder="Confirm Password"
+  value={form.confirm_password}
+  onChange={handleChange}
+  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${errors.confirm_password ? "border-red-600" : ""}`}
+/>
 
-                {errors.confirm_password && (
-                  <span className="text-red-600 text-md mt-1">{errors.confirm_password}</span>
-                )}
+<span
+  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+>
+  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+</span>
               </div>
 
+              {/* PIN */}
               <div className="col-span-2 md:col-span-1 relative">
                 <label className="block text-sm font-medium text-primary mb-1">PIN</label>
                 <input
@@ -398,20 +422,24 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   inputMode="numeric"
                   maxLength={4}
-                  className={`"w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3" pr-10 ${
-                    errors.pin ? "border-red-600" : ""
-                  }`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${errors.pin ? "border-red-600" : ""
+                    }`}
                 />
+
                 <span
                   onClick={() => setShowPin(!showPin)}
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500">
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
                 </span>
-                {errors.pin && <span className="text-red-600 text-md mt-1">{errors.pin}</span>}
               </div>
 
+              {/* CONFIRM PIN */}
               <div className="col-span-2 md:col-span-1 relative">
-                <label className="block text-sm font-medium text-primary mb-1">Confirm PIN</label>
+                <label className="block text-sm font-medium text-primary mb-1">
+                  Confirm PIN
+                </label>
+
                 <input
                   name="confirm_pin"
                   type={showConfirmPin ? "text" : "password"}
@@ -420,26 +448,26 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   inputMode="numeric"
                   maxLength={4}
-                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${
-                    errors.confirm_pin ? "border-red-600" : ""
-                  }`}
+                  className={`w-full text-black rounded-lg border-2 border-secondary/50 px-4 py-3 pr-10 ${errors.confirm_pin ? "border-red-600" : ""
+                    }`}
                 />
+
                 <span
                   onClick={() => setShowConfirmPin(!showConfirmPin)}
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500">
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
                 </span>
-                {errors.confirm_pin && (
-                  <span className="text-red-600 text-md mt-1">{errors.confirm_pin}</span>
-                )}
               </div>
 
+              {/* BUTTON */}
               <button
                 type="submit"
-                className="col-span-2 cursor-pointer
-                  w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition">
+                className="col-span-2 cursor-pointer w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition"
+              >
                 Create Account
               </button>
+
             </form>
 
             <p className="text-center text-xs text-gray-400 mt-4">

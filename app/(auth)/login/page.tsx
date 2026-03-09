@@ -138,11 +138,9 @@ export default function LoginPage() {
   return (
     <>
       <Loader show={loading} />
-
       <div className="min-h-screen flex bg-[#F7F7F7]">
         <SideBar />
-
-        <div className="w-full md:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             <div className="flex justify-center mb-8">
               <Image
