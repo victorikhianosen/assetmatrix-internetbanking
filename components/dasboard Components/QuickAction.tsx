@@ -41,6 +41,13 @@ export default function QuickAction() {
       href: "/bills/cable",
       icon: Cable,
     },
+    // {
+    //   label: "Electricity",
+    //    color: "#EE8520",
+    //   bgColor: "#EE852025",
+    //   href: "/bills/electricity",
+    //   icon: Lightbulb,
+    // },
   ];
 
   return (

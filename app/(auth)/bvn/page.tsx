@@ -81,7 +81,7 @@ export default function BvnPage() {
         <SideBar />
 
         {/* RIGHT PANEL */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
+        <div className="w-full flex items-center justify-center px-6">
           <div className="w-full max-w-md">
             {/* LOGO */}
             <div className="flex justify-center mb-8">
@@ -103,12 +103,9 @@ export default function BvnPage() {
             </div>
 
             {/* FORM */}
-            <form onSubmit={handleSubmit} className="space-y-5 pt-4">
+            <form onSubmit={handleSubmit} className="space-y-5 pt-16">
               {/* BVN INPUT */}
               <div>
-                <label className="block text-lg font-medium text-primary mb-1">
-                  Bank Verification Number (BVN)
-                </label>
 
                 <input
                   type="text"
@@ -121,9 +118,8 @@ export default function BvnPage() {
                     setError("");
                   }}
                   placeholder="Enter your 11-digit BVN"
-                  className={`w-full text-black rounded-lg border-secondary/50 px-4 py-3 border transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none ${
-                    error ? "border-red-500" : ""
-                  }`}
+                  className={`w-full text-black rounded-lg border-secondary/50 px-4 py-3 border transition focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none ${error ? "border-red-500" : ""
+                    }`}
                 />
 
                 <p className="text-xs text-gray-500 mt-1">
@@ -137,14 +133,14 @@ export default function BvnPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition disabled:opacity-50">
+                className="w-full py-3 cursor-pointer rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition disabled:opacity-50">
                 {loading ? "Verifying..." : "Continue"}
               </button>
             </form>
 
             {/* LINKS */}
             <div className="flex justify-between items-center mt-4">
-              <Link href="/login" className="text-sm text-primary hover:underline">
+              <Link href="/login" className="text-sm cursor-pointer text-primary hover:underline">
                 Back to login
               </Link>
 

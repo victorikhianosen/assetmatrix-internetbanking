@@ -10,5 +10,6 @@ export const UseGetTransactionReceipt = (referenceNo: string) => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: 5 * 60 * 1000, 
+    gcTime: 5 * 60 * 1000,
   });
 };

@@ -32,6 +32,7 @@ export default function DataPage() {
   const [open, setOpen] = useState(false);
 
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [errors, setErrors] = useState("");
   const [network, setNetwork] = useState<string>("");
   const [networkBundle, setNetworkBundle] = useState<string>("");
   const [selectedBundle, setSelectedBundle] = useState("");
@@ -44,10 +45,23 @@ export default function DataPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const { data: balanceData } = UseGetBalance();
-  const balance = balanceData?.data?.balance ?? 0;
+  const balance = Number(balanceData?.data?.balance) ?? 0;
 
   const { data: dataBundlesData } = useGetDataBundles(network);
   const dataBundles = dataBundlesData?.data ?? [];
+
+  useEffect(() => {
+    if (!dataAmount) {
+      setErrors("");
+      return;
+    }
+
+    if (dataAmount > balance) {
+      setErrors("Insufficient balance");
+    } else {
+      setErrors("");
+    }
+  }, [dataAmount, balance]);
 
   // Reset bundle when network changes
   useEffect(() => {
@@ -110,7 +124,12 @@ export default function DataPage() {
     }
   }
 
-  const isValid = phoneNumber.length === 11 && network !== "" && networkBundle !== "";
+  const isValid =
+    phoneNumber.length === 11 &&
+    network !== "" &&
+    networkBundle !== "" &&
+    dataAmount < balance &&
+    !errors;
 
   return (
     <>
@@ -202,7 +221,7 @@ export default function DataPage() {
                     maxLength={11}
                     onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ""))}
                     placeholder="Enter 11-digit phone number"
-                    className="w-full h-12 px-4 rounded-xl border border-border mt-2 focus:outline-none focus:ring-2 focus:ring-secondary"
+                    className="w-full h-12 px-4 rounded-xl mt-2 border border-secondary/50 focus:border-primary focus:ring-primary/20 focus:ring-2 outline-none"
                   />
                 </div>
 
@@ -218,6 +237,7 @@ export default function DataPage() {
                       disabled={!network}>
                       {selectedBundle || "Select a bundle"}
                     </button>
+                    {errors && <p className="text-red-600 text-sm">{errors}</p>}
 
                     {showDataBundles && (
                       <div className="mt-2 bg-white border border-border rounded-xl max-h-60 overflow-y-auto shadow-sm">

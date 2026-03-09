@@ -50,6 +50,7 @@ const normalizeGender = (gender: string) => (gender ? gender.toLowerCase() : "")
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [showConfirmPin, setShowConfirmPin] = useState(false);
 
@@ -111,19 +112,26 @@ export default function RegisterPage() {
      HANDLER
   ================================ */
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  let newValue = value;
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: undefined,
-    }));
-  };
+  // PIN fields → allow only digits and max 4
+  if (name === "pin" || name === "confirm_pin") {
+    newValue = value.replace(/\D/g, "").slice(0, 4);
+  }
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: newValue,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    [name]: undefined,
+  }));
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,9 +139,19 @@ export default function RegisterPage() {
     const newErrors: FormErrors = {};
 
     if (!form.email) newErrors.email = "Email is required";
-    if (!form.password) newErrors.password = "Password is required";
-    if (form.password !== form.confirm_password)
-      newErrors.confirm_password = "Passwords do not match";
+   if (!form.password) {
+  newErrors.password = "Password is required";
+} else if (form.password.length < 8) {
+  newErrors.password = "Password must be at least 8 characters";
+}
+
+if (!form.confirm_password) {
+  newErrors.confirm_password = "Confirm password is required";
+} else if (form.confirm_password.length < 8) {
+  newErrors.confirm_password = "Confirm password must be at least 8 characters";
+} else if (form.password !== form.confirm_password) {
+  newErrors.confirm_password = "Passwords do not match";
+}
 
     if (!/^\d{4}$/.test(form.pin)) newErrors.pin = "PIN must be exactly 4 digits";
 
@@ -370,8 +388,11 @@ export default function RegisterPage() {
                   className={inputStyle}
                 />
 
+
                 <span
                   onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -406,8 +427,11 @@ export default function RegisterPage() {
                   className={inputStyle}
                 />
 
+
                 <span
                   onClick={() => setShowPin(!showPin)}
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
                   {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -428,8 +452,11 @@ export default function RegisterPage() {
                   className={inputStyle}
                 />
 
+
                 <span
                   onClick={() => setShowConfirmPin(!showConfirmPin)}
+                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
+                >
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
                   {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -437,12 +464,14 @@ export default function RegisterPage() {
               </div>
 
               {/* BUTTON */}
+              {/* BUTTON */}
               <button
                 type="submit"
                 className="col-span-1 md:col-span-2 w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition"
               >
                 Create Account
               </button>
+
             </form>
 
             <p className="text-center text-xs text-gray-400 mt-6">
