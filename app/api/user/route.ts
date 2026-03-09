@@ -23,8 +23,7 @@ export async function GET() {
     const res = await fetch(`${baseUrl}/api/customers/get-details`, {
       method: "GET",
       headers: privateHeaders(token),
-      cache: "no-store",
-    });
+      });
 
     if (!res.ok) {
       return NextResponse.json(

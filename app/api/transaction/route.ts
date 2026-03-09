@@ -23,7 +23,6 @@ export async function GET() {
     const res = await fetch(`${baseUrl}/api/transactions/all`, {
       method: "GET",
       headers: privateHeaders(token),
-      cache: "no-store",
     });
 
     if (!res.ok) {

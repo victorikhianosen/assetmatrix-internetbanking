@@ -22,7 +22,6 @@ export async function getBanks() {
             {
                 method: "GET",
                 headers: privateHeaders(token),
-                cache: "no-store",
             }
 
         );

@@ -20,7 +20,6 @@ export async function getCable(cable: string) {
       method: "POST",
       headers: privateHeaders(token),
       body: JSON.stringify({ cable_type: cable }),
-      cache: "no-store",
     });
 
     return await res.json();

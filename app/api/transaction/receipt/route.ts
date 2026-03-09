@@ -27,7 +27,6 @@ export async function GET(req: Request) {
     const res = await fetch(`${baseUrl}/api/transactions/${reference_no}`, {
       method: "GET",
       headers: privateHeaders(token),
-      cache: "no-store",
     });
 
     if (!res.ok) {

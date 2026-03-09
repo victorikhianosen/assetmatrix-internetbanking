@@ -20,7 +20,6 @@ export async function getDataBundles(network: string) {
       method: "POST",
       headers: privateHeaders(token),
       body: JSON.stringify({ network_provider: network }),
-      cache: "no-store",
     });
 
     return await res.json();
