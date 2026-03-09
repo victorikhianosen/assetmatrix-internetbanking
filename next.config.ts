@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cba.pakassocredit.com",
-        pathname: "/uploads/**",
+        hostname: "assetmatrix.cashmatrixagent.com",
+        // pathname: "/uploads/**",
       },
     ],
   },
