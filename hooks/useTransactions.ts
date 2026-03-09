@@ -12,7 +12,8 @@ export const useGetTransactions = () => {
     queryKey: ["transactions"],
     queryFn: fetchTransactions,
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
+    refetchOnMount: false,
     staleTime: 5 * 60 * 1000, // 5 minutes,
+    gcTime: 5 * 60 * 1000,
   });
 };
