@@ -393,8 +393,7 @@ if (!form.confirm_password) {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
-                >
+                
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </span>
               </div>
@@ -432,9 +431,8 @@ if (!form.confirm_password) {
                   onClick={() => setShowPin(!showPin)}
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
-                >
-                  {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
+              
+                  {showPin ? <EyeOff /> : <Eye />}
                 </span>
               </div>
 
@@ -457,9 +455,8 @@ if (!form.confirm_password) {
                   onClick={() => setShowConfirmPin(!showConfirmPin)}
                   className="absolute right-4 top-10 cursor-pointer text-gray-500"
                 >
-                  className="absolute right-4 top-10 cursor-pointer text-gray-500"
-                >
-                  {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
+              
+                  {showConfirmPin ? <EyeOff /> : <Eye />}
                 </span>
               </div>
 
