@@ -56,7 +56,6 @@ export default function PhoneSetup() {
       }
       toast.error(res.message);
       setError(res.message);
-      toast.error(res.message);
       setLoading(false);
     } catch {
       setLoading(false);

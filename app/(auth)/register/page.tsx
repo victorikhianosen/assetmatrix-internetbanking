@@ -229,7 +229,7 @@ if (!form.confirm_password) {
       <div className="min-h-screen flex bg-muted">
         <SideBar />
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-10">
+        <div className="w-full flex items-center justify-center px-6 py-10">
           <div className="w-full max-w-3xl">
 
             {/* LOGO */}
