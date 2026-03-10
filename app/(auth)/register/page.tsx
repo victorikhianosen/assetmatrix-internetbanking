@@ -464,7 +464,7 @@ if (!form.confirm_password) {
               {/* BUTTON */}
               <button
                 type="submit"
-                className="col-span-1 md:col-span-2 w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition"
+                className="col-span-1 cursor-pointer md:col-span-2 w-full py-3 rounded-lg font-semibold bg-primary text-white hover:opacity-90 transition"
               >
                 Create Account
               </button>
